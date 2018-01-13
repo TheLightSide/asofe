@@ -18,6 +18,7 @@
 #include "script/sign.h"
 #include "script/standard.h"
 #include "uint256.h"
+#include "univalue/include/univalue.h"
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h"
 #endif
@@ -25,8 +26,6 @@
 #include <stdint.h>
 
 #include <boost/assign/list_of.hpp>
-
-#include <univalue.h>
 
 using namespace std;
 

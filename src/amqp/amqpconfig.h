@@ -27,7 +27,7 @@
 #include <proton/url.hpp>
 #endif
 
-#include "primitives/block.h"
-#include "primitives/transaction.h"
+#include "../primitives/block.h"
+#include "../primitives/transaction.h"
 
 #endif // ZCASH_AMQP_AMQPCONFIG_H

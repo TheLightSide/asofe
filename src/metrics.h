@@ -77,7 +77,7 @@ void ThreadShowMetricsScreen();
  * License: CC BY-SA 3.0
  *
  * Rendering options:
- * Zcash: img2txt -W 40 -H 20 -f utf8 -d none -g 0.7 Z-yellow.orange-logo.png
+ * Zcash: img2txt -W 40 -H 20 -f utf8 -d none -g 0.7 offer-topaz-35.png
  * Heart: img2txt -W 40 -H 20 -f utf8 -d none 2000px-Heart_corazón.svg.png
  */
 const std::string METRICS_ART =

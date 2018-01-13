@@ -6,19 +6,19 @@
 #ifndef BITCOIN_PRIMITIVES_TRANSACTION_H
 #define BITCOIN_PRIMITIVES_TRANSACTION_H
 
-#include "amount.h"
-#include "random.h"
-#include "script/script.h"
-#include "serialize.h"
-#include "uint256.h"
-#include "consensus/consensus.h"
+#include "../amount.h"
+#include "../random.h"
+#include "../script/script.h"
+#include "../serialize.h"
+#include "../uint256.h"
+#include "../consensus/consensus.h"
 
 #include <boost/array.hpp>
 
-#include "zcash/NoteEncryption.hpp"
-#include "zcash/Zcash.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Proof.hpp"
+#include "../zcash/NoteEncryption.hpp"
+#include "../zcash/Zcash.h"
+#include "../zcash/JoinSplit.hpp"
+#include "../zcash/Proof.hpp"
 
 class JSDescription
 {

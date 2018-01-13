@@ -5,7 +5,7 @@
 #ifndef ZCASH_AMQP_AMQPNOTIFICATIONINTERFACE_H
 #define ZCASH_AMQP_AMQPNOTIFICATIONINTERFACE_H
 
-#include "validationinterface.h"
+#include "../validationinterface.h"
 #include <string>
 #include <map>
 

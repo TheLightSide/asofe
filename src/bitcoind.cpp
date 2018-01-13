@@ -116,8 +116,8 @@ bool AppInit(int argc, char* argv[])
                  _("- Source code:  %s\n"
                    "- .deb package: %s\n")).c_str(),
                 GetConfigFile().string().c_str(),
-                "contrib/debian/examples/zcash.conf",
-                "/usr/share/doc/zcash/examples/zcash.conf");
+                "contrib/debian/examples/asofe.conf",
+                "/usr/share/doc/zcash/examples/asofe.conf");
             return false;
         } catch (const std::exception& e) {
             fprintf(stderr,"Error reading configuration file: %s\n", e.what());
@@ -144,7 +144,7 @@ bool AppInit(int argc, char* argv[])
         fDaemon = GetBoolArg("-daemon", false);
         if (fDaemon)
         {
-            fprintf(stdout, "Zcash server starting\n");
+            fprintf(stdout, "Asofe server starting\n");
 
             // Daemonize
             pid_t pid = fork();

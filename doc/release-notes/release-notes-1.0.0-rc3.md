@@ -6,7 +6,7 @@ Daira Hopwood (9):
       Fix licensing to comply with OpenSSL and Berkeley DB licenses.
       Changes to upgrade bdb to 6.2.23
       util: Update tinyformat
-      Tweak descriptions of mining parameters for example zcash.conf.
+      Tweak descriptions of mining parameters for example asofe.conf.
       Update dnsseeds for mainnet. closes #1369
       Minor update to release process.
       Remove the override of nMaxTipAge that effectively disables it on testnet.
@@ -28,7 +28,7 @@ Louis Nyffenegger (1):
       Fix typo in README.md
 
 Paige Peterson (3):
-      add zcash.config
+      add asofe.config
       fix per Jack's mod suggestions
       fix per Daira's suggestions
 

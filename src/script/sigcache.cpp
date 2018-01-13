@@ -5,10 +5,11 @@
 
 #include "sigcache.h"
 
-#include "pubkey.h"
-#include "random.h"
-#include "uint256.h"
-#include "util.h"
+#include "../pubkey.h"
+#include "../random.h"
+#include "../uint256.h"
+#include "../util.h"
+#include "interpreter.h"
 
 #include <boost/thread.hpp>
 #include <boost/tuple/tuple_comparison.hpp>

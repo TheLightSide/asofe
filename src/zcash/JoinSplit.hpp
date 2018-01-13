@@ -8,8 +8,8 @@
 #include "IncrementalMerkleTree.hpp"
 #include "NoteEncryption.hpp"
 
-#include "uint256.h"
-#include "uint252.h"
+#include "../uint256.h"
+#include "../uint252.h"
 
 #include <boost/array.hpp>
 

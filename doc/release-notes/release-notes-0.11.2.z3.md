@@ -63,7 +63,7 @@ Taylor Hornby (7):
       Fix sighash tests
       Add empty merkle/noteencryption tests so Sean can rebase.
       Fix RPC tests
-      Rename bitcoin.conf and bitcoind.pid to zcash.conf and zcashd.pid in qa/ and src/
+      Rename bitcoin.conf and bitcoind.pid to asofe.conf and zcashd.pid in qa/ and src/
       Trivial change: Capitalize the Z in Zerocash
       Remove the Merkle tree hash function's fixed point.
 

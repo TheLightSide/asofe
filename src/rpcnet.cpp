@@ -13,10 +13,9 @@
 #include "timedata.h"
 #include "util.h"
 #include "version.h"
+#include "univalue/include/univalue.h"
 
 #include <boost/foreach.hpp>
-
-#include <univalue.h>
 
 using namespace std;
 
@@ -179,8 +178,8 @@ UniValue addnode(const UniValue& params, bool fHelp)
             "1. \"node\"     (string, required) The node (see getpeerinfo for nodes)\n"
             "2. \"command\"  (string, required) 'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once\n"
             "\nExamples:\n"
-            + HelpExampleCli("addnode", "\"192.168.0.6:8233\" \"onetry\"")
-            + HelpExampleRpc("addnode", "\"192.168.0.6:8233\", \"onetry\"")
+            + HelpExampleCli("addnode", "\"192.168.1.6:8585\" \"onetry\"")
+            + HelpExampleRpc("addnode", "\"192.168.1.6:8585\", \"onetry\"")
         );
 
     string strNode = params[0].get_str();
@@ -223,8 +222,8 @@ UniValue disconnectnode(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. \"node\"     (string, required) The node (see getpeerinfo for nodes)\n"
             "\nExamples:\n"
-            + HelpExampleCli("disconnectnode", "\"192.168.0.6:8233\"")
-            + HelpExampleRpc("disconnectnode", "\"192.168.0.6:8233\"")
+            + HelpExampleCli("disconnectnode", "\"192.168.1.6:8585\"")
+            + HelpExampleRpc("disconnectnode", "\"192.168.1.6:8585\"")
         );
 
     CNode* pNode = FindNode(params[0].get_str());
@@ -251,11 +250,11 @@ UniValue getaddednodeinfo(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "[\n"
             "  {\n"
-            "    \"addednode\" : \"192.168.0.201\",   (string) The node ip address\n"
+            "    \"addednode\" : \"192.168.1.201\",   (string) The node ip address\n"
             "    \"connected\" : true|false,          (boolean) If connected\n"
             "    \"addresses\" : [\n"
             "       {\n"
-            "         \"address\" : \"192.168.0.201:8233\",  (string) The Zcash server host and port\n"
+            "         \"address\" : \"192.168.1.201:8585\",  (string) The Zcash server host and port\n"
             "         \"connected\" : \"outbound\"           (string) connection, inbound or outbound\n"
             "       }\n"
             "       ,...\n"
@@ -265,8 +264,8 @@ UniValue getaddednodeinfo(const UniValue& params, bool fHelp)
             "]\n"
             "\nExamples:\n"
             + HelpExampleCli("getaddednodeinfo", "true")
-            + HelpExampleCli("getaddednodeinfo", "true \"192.168.0.201\"")
-            + HelpExampleRpc("getaddednodeinfo", "true, \"192.168.0.201\"")
+            + HelpExampleCli("getaddednodeinfo", "true \"192.168.1.201\"")
+            + HelpExampleRpc("getaddednodeinfo", "true, \"192.168.1.201\"")
         );
 
     bool fDns = params[0].get_bool();
@@ -482,9 +481,9 @@ UniValue setban(const UniValue& params, bool fHelp)
                             "3. \"bantime\"      (numeric, optional) time in seconds how long (or until when if [absolute] is set) the ip is banned (0 or empty means using the default time of 24h which can also be overwritten by the -bantime startup argument)\n"
                             "4. \"absolute\"     (boolean, optional) If set, the bantime must be a absolute timestamp in seconds since epoch (Jan 1 1970 GMT)\n"
                             "\nExamples:\n"
-                            + HelpExampleCli("setban", "\"192.168.0.6\" \"add\" 86400")
-                            + HelpExampleCli("setban", "\"192.168.0.0/24\" \"add\"")
-                            + HelpExampleRpc("setban", "\"192.168.0.6\", \"add\" 86400")
+                            + HelpExampleCli("setban", "\"192.168.1.6\" \"add\" 86400")
+                            + HelpExampleCli("setban", "\"192.168.1.0/24\" \"add\"")
+                            + HelpExampleRpc("setban", "\"192.168.1.6\", \"add\" 86400")
                             );
 
     CSubNet subNet;

@@ -3,7 +3,8 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "amqpabstractnotifier.h"
-#include "util.h"
+#include "../util.h"
+#include "../primitives/transaction.h"
 
 
 AMQPAbstractNotifier::~AMQPAbstractNotifier()

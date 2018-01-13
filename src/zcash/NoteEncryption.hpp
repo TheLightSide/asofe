@@ -7,10 +7,10 @@ https://github.com/zcash/zips/blob/master/protocol/protocol.pdf
 #define ZC_NOTE_ENCRYPTION_H_
 
 #include <boost/array.hpp>
-#include "uint256.h"
-#include "uint252.h"
+#include "../uint256.h"
+#include "../uint252.h"
 
-#include "zcash/Zcash.h"
+#include "../zcash/Zcash.h"
 
 namespace libzcash {
 

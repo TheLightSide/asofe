@@ -16,13 +16,13 @@ Jack Grigg (22):
       Suggest ./zcutil/fetch-params.sh as well
       Update debug categories
       Rename build-aux/m4/bitcoin_find_bdb48.m4 to remove version
-      Throw an error if zcash.conf is missing
-      Show a friendly message explaining why zcashd needs a zcash.conf
+      Throw an error if asofe.conf is missing
+      Show a friendly message explaining why zcashd needs a asofe.conf
       Fix gtest ordering broken by #1949
       Debian package lint
       Generate Debian control file to fix shlibs lint
-      Create empty zcash.conf during performance measurements
-      Create empty zcash.conf during coverage checks
+      Create empty asofe.conf during performance measurements
+      Create empty asofe.conf during coverage checks
       Coverage build system tweaks
 
 Jay Graber (1):
@@ -44,7 +44,7 @@ Simon Liu (13):
       Fixes a bug where the unsigned transaction was logged by z_sendmany after a successful sign and send, meaning that the logged hash fragment would be different from the txid logged by "AddToWallet".  This issue occured when sending from transparent addresses, as utxo inputs must be signed.  It did not occur when sending from shielded addresses.
       Bump COPYRIGHT_YEAR from 2016 to 2017.
       Closes #1780. Result of z_getoperationstatus now sorted by creation time of operation
-      Remove UTF-8 BOM efbbbf from zcash.conf to avoid problems with command line tools
+      Remove UTF-8 BOM efbbbf from asofe.conf to avoid problems with command line tools
       Closes #1097 so zcash-cli now displays license info like zcashd.
       Fixes #1497 ZCA-009 by restricting data exporting to user defined folder.
       Closes #1957 by adding tx serialization size to listtransactions output.
