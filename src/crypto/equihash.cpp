@@ -60,17 +60,17 @@ void ExpandArray(const unsigned char* in, size_t in_len,
                  size_t bit_len, size_t byte_pad)
 {
     assert(bit_len >= 8);
-    assert(8*sizeof(uint64_t) >= 7+bit_len);
+    assert(8*sizeof(uint32_t) >= 7+bit_len);
 
     size_t out_width { (bit_len+7)/8 + byte_pad };
     assert(out_len == 8*out_width*in_len/bit_len);
 
-    uint64_t bit_len_mask { ((uint64_t)1 << bit_len) - 1 };
+    uint32_t bit_len_mask { ((uint32_t)1 << bit_len) - 1 };
 
     // The acc_bits least-significant bits of acc_value represent a bit sequence
     // in big-endian order.
     size_t acc_bits = 0;
-    uint64_t acc_value = 0;
+    uint32_t acc_value = 0;
 
     size_t j = 0;
     for (size_t i = 0; i < in_len; i++) {
@@ -103,17 +103,17 @@ void CompressArray(const unsigned char* in, size_t in_len,
                    size_t bit_len, size_t byte_pad)
 {
     assert(bit_len >= 8);
-    assert(8*sizeof(uint64_t) >= 7+bit_len);
+    assert(8*sizeof(uint32_t) >= 7+bit_len);
 
     size_t in_width { (bit_len+7)/8 + byte_pad };
     assert(out_len == bit_len*in_len/(8*in_width));
 
-    uint64_t bit_len_mask { ((uint64_t)1 << bit_len) - 1 };
+    uint32_t bit_len_mask { ((uint32_t)1 << bit_len) - 1 };
 
     // The acc_bits least-significant bits of acc_value represent a bit sequence
     // in big-endian order.
     size_t acc_bits = 0;
-    uint64_t acc_value = 0;
+    uint32_t acc_value = 0;
 
     size_t j = 0;
     for (size_t i = 0; i < out_len; i++) {
@@ -814,15 +814,3 @@ template bool Equihash<48,5>::OptimisedSolve(const eh_HashState& base_state,
                                              const std::function<bool(EhSolverCancelCheck)> cancelled);
 #endif
 template bool Equihash<48,5>::IsValidSolution(const eh_HashState& base_state, std::vector<unsigned char> soln);
-
-// Explicit instantiations for Equihash<256,11>
-template int Equihash<256,11>::InitialiseState(eh_HashState& base_state);
-#ifdef ENABLE_MINING
-template bool Equihash<256,11>::BasicSolve(const eh_HashState& base_state,
-                                         const std::function<bool(std::vector<unsigned char>)> validBlock,
-                                         const std::function<bool(EhSolverCancelCheck)> cancelled);
-template bool Equihash<256,11>::OptimisedSolve(const eh_HashState& base_state,
-                                             const std::function<bool(std::vector<unsigned char>)> validBlock,
-                                             const std::function<bool(EhSolverCancelCheck)> cancelled);
-#endif
-template bool Equihash<256,11>::IsValidSolution(const eh_HashState& base_state, std::vector<unsigned char> soln);

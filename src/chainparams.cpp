@@ -91,17 +91,13 @@ public:
         genesis.nSolution = ParseHex("00a11b436d0d79706fcd079af85fe65e97443b03a5091fad4fa4848d22cdf7712399a71b70520b8838f807026939f417fdc2eb9cd166d54dddf7202afccb3c3b2a3797dceeec8d79c7a58c3c7d32adcd0553781f0a9a44b49f236c9f71fc68ed0fdc764e60dbfae52c2e509e029f985c6d353f83c702c24bf1c36a9080c938905c83c9b5dd63b758e46eedc4b7852b525338503ddeae47c7550a91a423869fe2cdd741e5da33781d027491d3fcd426d57ecd40f2d5dd280317a2fe76750543126e6a4f6893f47200a038f7b0553777953ed6063b67757772f661f4a0d776eee7387e2f8e3971541068efbdb0d5c3a0c6d2011c43b9f1e968f39579a00860510ad1cf485744fd2104578884bcdbf57302ac152bd6b9c6a8287f5279f3070c21fcc6c7b85cb67f1d2bcbbfee09065a8ab1196bb77669c69f64be42c61ea97e68fef01bcd84fa82e2ba9e135ecc8c57674900d8f43ba28df0cfda82902c384e31f01eb150f43c175287becbda3afceb90c5bbee6ca831fe009ff87512c5d36f62d1ae41236a927c55709c269070ba64482ea07b7eadcf31a39869744cd6744a9d2074d6202003151fef180ba975251f630384cd2cad77f41cbe6b0d69eabd4e774351ba484146af20315dbb9f6e9efc112c06f459876d3accb434e687ff748a110ef22c7e2392aa487dd8cfa8cf5af449194c41a6142d74912b04422e6aee0d5d95293821c068b2a78b74e51e067d11258c43db73fd7de78325592dcfb1699958ae9dcf0cea9a09960afe737999410504635d924946d517e30da0a61fc114d65cae70b4bfc94567d1c3bfd360710536f56efcd56d2cf98a66c85ccd4fb21dee58228707093c9d692b39dbf7ff622adda35639a619f84ce20d34afc83319db672a5040ef2534de055d3e5a9c8724a2f96c31b89d3be1c55270e3c900b142c5bcd20a013486da07886bd1682c831d7addd85cfa3528bc7a0b3f9c37e00673aa92e181e6891b1aa48138261e66100b63d42a2a2ae3e95151e935e08b551daa57dd3e1fd205b562b0d265e32ed47482ce2919f47993556a08665b0d25ccf45b228740d1e12fe3604bb5a429981d16d4c71b6611a7345365124661999361911e26c9229b829aab1baf6d3eb9a4870ede2855d56b7d91c03c97b7acf2d2ac7f0696e4411af52322f254def49401707c89022e4015ec5d70390c7e5998e8e75d8d08249a4e3e820e8d715101c631b4f6ee3e9e7bdaa6ee044f03e42193f97afce610ee72bba8e1f0195ff0331ee4c377692e6de1d9d8d2c67a614f19ce041e61560a30bbbc08d294fbb2c510ad13d773a2f8dd7d55110bee890c544c5f15fcecb2285ce4604612f9bd602e10ed73bad3dc7c6dca31e18bb3d7c82d19986a033728b051ddf0d8e533451156b6014c1445b967beaf4c030e5e7a4c9df5096caf634e30edc535c1f4beabb5042d9e0e7ddc3eb1f13b112ad029d06e431d1fb5f310e4a54bf8f01ae982c51147598be3da2f067454a727641f1bb7a523d53185352512300e1ddcad8f068d0fb24fd658b2a06bce1e62529a4a43e542cd78f0be169f374dbe903239d0c921946dc555416ff7d03d9616469d33ab8769cfecd371f0f29832e53372ca4e0c339c65d22e536cd3e5e3845d7da9a6de4d25dee6f5053f7fb9c79103cfe1e35426bd5e52b950af9245a73275d4fc9f4e09f9150dc450da333d8977806e50382fd8dec0476f2f5b8176f5e125e1921d9336b1fc3c66e45c3d1b6223394821c84e94e0878f80ab7f9f820b864308fd51b328bb65282ea6ccda1ad285188d220be574421fcf44f6b3de8101efe7fc21aa81decfd50b8dbf6ff29c30aefa73d1fc5725b6b5a511b9bd0c10de7c491b225f5b68f3f3b60a2cb6b91ce4cdb163");
 
         consensus.hashGenesisBlock = genesis.GetHash();
-        cout << "consensus.hashGenesisBlock: " << consensus.hashGenesisBlock.ToString();
-        cout << "genesis.hashMerkleRoot: " << genesis.hashMerkleRoot.ToString();
         assert(consensus.hashGenesisBlock == uint256S("0000363adb70e2cee5171918dc4ced36fa712abbb057b4807fff56d598b74be4"));
         assert(genesis.hashMerkleRoot == uint256S("0xdf6fc210ea76d364af851fd7ce5479f717cb8f4a1a4e577f15722933b532875b"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
         // TODO Change seed adresses
-        vSeeds.push_back(CDNSSeedData("asofe.org", "dnsseed.asofe.org")); // Zcash
-//        vSeeds.push_back(CDNSSeedData("str4d.xyz", "dnsseed.str4d.xyz")); // @str4d
-//        vSeeds.push_back(CDNSSeedData("znodes.org", "dnsseed.znodes.org")); // @bitcartel
+        vSeeds.push_back(CDNSSeedData("asofe.org", "dnsseed.asofe.org")); // AsofeSeed
 
         // guarantees the first 2 characters, when base58 encoded, are "t1"
         base58Prefixes[PUBKEY_ADDRESS]     = {0x1C,0xB8};
@@ -141,72 +137,19 @@ public:
 //        };
 
         checkpointData = (Checkpoints::CCheckpointData) {
-            boost::assign::map_list_of
-                ( 0, consensus.hashGenesisBlock),
+            boost::assign::map_list_of ( 0, consensus.hashGenesisBlock),
             genesis.nTime,
             0,
             0
         };
 
-//        // Founders reward script expects a vector of 2-of-3 multisig addresses
-//        vFoundersRewardAddress = {
-//            "t3Vz22vK5z2LcKEdg16Yv4FFneEL1zg9ojd", /* main-index: 0*/
-//            "t3cL9AucCajm3HXDhb5jBnJK2vapVoXsop3", /* main-index: 1*/
-//            "t3fqvkzrrNaMcamkQMwAyHRjfDdM2xQvDTR", /* main-index: 2*/
-//            "t3TgZ9ZT2CTSK44AnUPi6qeNaHa2eC7pUyF", /* main-index: 3*/
-//            "t3SpkcPQPfuRYHsP5vz3Pv86PgKo5m9KVmx", /* main-index: 4*/
-//            "t3Xt4oQMRPagwbpQqkgAViQgtST4VoSWR6S", /* main-index: 5*/
-//            "t3ayBkZ4w6kKXynwoHZFUSSgXRKtogTXNgb", /* main-index: 6*/
-//            "t3adJBQuaa21u7NxbR8YMzp3km3TbSZ4MGB", /* main-index: 7*/
-//            "t3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2", /* main-index: 8*/
-//            "t3RYnsc5nhEvKiva3ZPhfRSk7eyh1CrA6Rk", /* main-index: 9*/
-//            "t3Ut4KUq2ZSMTPNE67pBU5LqYCi2q36KpXQ", /* main-index: 10*/
-//            "t3ZnCNAvgu6CSyHm1vWtrx3aiN98dSAGpnD", /* main-index: 11*/
-//            "t3fB9cB3eSYim64BS9xfwAHQUKLgQQroBDG", /* main-index: 12*/
-//            "t3cwZfKNNj2vXMAHBQeewm6pXhKFdhk18kD", /* main-index: 13*/
-//            "t3YcoujXfspWy7rbNUsGKxFEWZqNstGpeG4", /* main-index: 14*/
-//            "t3bLvCLigc6rbNrUTS5NwkgyVrZcZumTRa4", /* main-index: 15*/
-//            "t3VvHWa7r3oy67YtU4LZKGCWa2J6eGHvShi", /* main-index: 16*/
-//            "t3eF9X6X2dSo7MCvTjfZEzwWrVzquxRLNeY", /* main-index: 17*/
-//            "t3esCNwwmcyc8i9qQfyTbYhTqmYXZ9AwK3X", /* main-index: 18*/
-//            "t3M4jN7hYE2e27yLsuQPPjuVek81WV3VbBj", /* main-index: 19*/
-//            "t3gGWxdC67CYNoBbPjNvrrWLAWxPqZLxrVY", /* main-index: 20*/
-//            "t3LTWeoxeWPbmdkUD3NWBquk4WkazhFBmvU", /* main-index: 21*/
-//            "t3P5KKX97gXYFSaSjJPiruQEX84yF5z3Tjq", /* main-index: 22*/
-//            "t3f3T3nCWsEpzmD35VK62JgQfFig74dV8C9", /* main-index: 23*/
-//            "t3Rqonuzz7afkF7156ZA4vi4iimRSEn41hj", /* main-index: 24*/
-//            "t3fJZ5jYsyxDtvNrWBeoMbvJaQCj4JJgbgX", /* main-index: 25*/
-//            "t3Pnbg7XjP7FGPBUuz75H65aczphHgkpoJW", /* main-index: 26*/
-//            "t3WeKQDxCijL5X7rwFem1MTL9ZwVJkUFhpF", /* main-index: 27*/
-//            "t3Y9FNi26J7UtAUC4moaETLbMo8KS1Be6ME", /* main-index: 28*/
-//            "t3aNRLLsL2y8xcjPheZZwFy3Pcv7CsTwBec", /* main-index: 29*/
-//            "t3gQDEavk5VzAAHK8TrQu2BWDLxEiF1unBm", /* main-index: 30*/
-//            "t3Rbykhx1TUFrgXrmBYrAJe2STxRKFL7G9r", /* main-index: 31*/
-//            "t3aaW4aTdP7a8d1VTE1Bod2yhbeggHgMajR", /* main-index: 32*/
-//            "t3YEiAa6uEjXwFL2v5ztU1fn3yKgzMQqNyo", /* main-index: 33*/
-//            "t3g1yUUwt2PbmDvMDevTCPWUcbDatL2iQGP", /* main-index: 34*/
-//            "t3dPWnep6YqGPuY1CecgbeZrY9iUwH8Yd4z", /* main-index: 35*/
-//            "t3QRZXHDPh2hwU46iQs2776kRuuWfwFp4dV", /* main-index: 36*/
-//            "t3enhACRxi1ZD7e8ePomVGKn7wp7N9fFJ3r", /* main-index: 37*/
-//            "t3PkLgT71TnF112nSwBToXsD77yNbx2gJJY", /* main-index: 38*/
-//            "t3LQtHUDoe7ZhhvddRv4vnaoNAhCr2f4oFN", /* main-index: 39*/
-//            "t3fNcdBUbycvbCtsD2n9q3LuxG7jVPvFB8L", /* main-index: 40*/
-//            "t3dKojUU2EMjs28nHV84TvkVEUDu1M1FaEx", /* main-index: 41*/
-//            "t3aKH6NiWN1ofGd8c19rZiqgYpkJ3n679ME", /* main-index: 42*/
-//            "t3MEXDF9Wsi63KwpPuQdD6by32Mw2bNTbEa", /* main-index: 43*/
-//            "t3WDhPfik343yNmPTqtkZAoQZeqA83K7Y3f", /* main-index: 44*/
-//            "t3PSn5TbMMAEw7Eu36DYctFezRzpX1hzf3M", /* main-index: 45*/
-//            "t3R3Y5vnBLrEn8L6wFjPjBLnxSUQsKnmFpv", /* main-index: 46*/
-//            "t3Pcm737EsVkGTbhsu2NekKtJeG92mvYyoN", /* main-index: 47*/
-////            "t3PZ9PPcLzgL57XRSG5ND4WNBC9UTFb8DXv", /* main-index: 48*/
-////            "t3L1WgcyQ95vtpSgjHfgANHyVYvffJZ9iGb", /* main-index: 49*/
-////            "t3JtoXqsv3FuS7SznYCd5pZJGU9di15mdd7", /* main-index: 50*/
-////            "t3hLJHrHs3ytDgExxr1mD8DYSrk1TowGV25", /* main-index: 51*/
-////            "t3fmYHU2DnVaQgPhDs6TMFVmyC3qbWEWgXN", /* main-index: 52*/
-////            "t3T4WmAp6nrLkJ24iPpGeCe1fSWTPv47ASG", /* main-index: 53*/
-////            "t3fP6GrDM4QVwdjFhmCxGNbe7jXXXSDQ5dv", /* main-index: 54*/
-//};
-//        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
+        // Founders reward script expects a vector of 2-of-3 multisig addresses
+        vFoundersRewardAddress = {
+            "t3L41h8fDTiJxQRj1xw4k5yZeoa6iPtigQN", /* main-index: 1*/
+            "t3d1cF9r1EZJvXxPSJwASKGWQr4dW6xXErC", /* main-index: 2*/
+            "t3QfHLkdw4uUd1kML2aeeU9J6rX4Qe8r5TN", /* main-index: 3*/
+};
+        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
 };
 static CMainParams mainParams;
