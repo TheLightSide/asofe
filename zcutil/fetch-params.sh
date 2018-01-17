@@ -6,8 +6,7 @@ PARAMS_DIR="$HOME/.asofe-params"
 
 SPROUT_PKEY_NAME='sprout-proving.key'
 SPROUT_VKEY_NAME='sprout-verifying.key'
-SPROUT_URL="https://z.cash/downloads"
-SPROUT_IPFS="/ipfs/QmZKKx7Xup7LiAtFRhYsE1M7waXcv9ir9eCECyXAFGxhEo"
+SPROUT_URL="https://s3.eu-west-3.amazonaws.com/asofe"
 
 SHA256CMD="$(command -v sha256sum || echo shasum)"
 SHA256ARGS="$(command -v sha256sum >/dev/null || echo '-a 256')"
@@ -38,35 +37,6 @@ EOF
         --continue \
         --retry-connrefused --waitretry=3 --timeout=30 \
         "$SPROUT_URL/$filename"
-}
-
-function fetch_ipfs {
-    if [ -z "$IPFSCMD" ] || ! [ -z "$ZC_DISABLE_IPFS" ]; then
-        return 1
-    fi
-
-    local filename="$1"
-    local dlname="$2"
-
-    cat <<EOF
-
-Retrieving (ipfs): $SPROUT_IPFS/$filename
-EOF
-
-    ipfs get --output "$dlname" "$SPROUT_IPFS/$filename"
-}
-
-function fetch_failure {
-    cat >&2 <<EOF
-
-Failed to fetch the Zcash zkSNARK parameters!
-Try installing one of the following programs and make sure you're online:
-
- * ipfs
- * wget
-
-EOF
-    exit 1
 }
 
 function fetch_params {
@@ -121,9 +91,9 @@ function main() {
     || exit_locked_error
 
     cat <<EOF
-Zcash - fetch-params.sh
+Asofe - fetch-params.sh
 
-This script will fetch the Zcash zkSNARK parameters and verify their
+This script will fetch the Asofe zkSNARK parameters and verify their
 integrity with sha256sum.
 
 If they already exist locally, it will exit now and do nothing else.
@@ -135,7 +105,7 @@ EOF
         mkdir -p "$PARAMS_DIR"
         README_PATH="$PARAMS_DIR/README"
         cat >> "$README_PATH" <<EOF
-This directory stores common Zcash zkSNARK parameters. Note that it is
+This directory stores common Asofe zkSNARK parameters. Note that it is
 distinct from the daemon's -datadir argument because the parameters are
 large and may be shared across multiple distinct -datadir's such as when
 setting up test networks.
@@ -156,8 +126,8 @@ EOF
 
     cd "$PARAMS_DIR"
 
-    fetch_params "$SPROUT_PKEY_NAME" "$PARAMS_DIR/$SPROUT_PKEY_NAME" "8bc20a7f013b2b58970cddd2e7ea028975c88ae7ceb9259a5344a16bc2c0eef7"
-    fetch_params "$SPROUT_VKEY_NAME" "$PARAMS_DIR/$SPROUT_VKEY_NAME" "4bd498dae0aacfd8e98dc306338d017d9c08dd0918ead18172bd0aec2fc5df82"
+    fetch_params "$SPROUT_PKEY_NAME" "$PARAMS_DIR/$SPROUT_PKEY_NAME" "cc8cde5add0a7e3844f731640a253db92fcee12f3ccd219469c668dff352f4df"
+    fetch_params "$SPROUT_VKEY_NAME" "$PARAMS_DIR/$SPROUT_VKEY_NAME" "048cc085afb9b5f975e9bfded73af41553b2989d46144586ca2915d15f4fca05"
 }
 
 main
