@@ -145,10 +145,17 @@ public:
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {
-            "t3L41h8fDTiJxQRj1xw4k5yZeoa6iPtigQN", /* main-index: 1*/
-            "t3d1cF9r1EZJvXxPSJwASKGWQr4dW6xXErC", /* main-index: 2*/
-            "t3QfHLkdw4uUd1kML2aeeU9J6rX4Qe8r5TN", /* main-index: 3*/
-};
+            "t3WsmKEN6yeLqYi1MS71v743ynnWrppfTcS", /* main-index: 1*/
+            "t3Z5KvRfUVd9EaAeGKYvYCqLjFwDPkuJ4K9", /* main-index: 2*/
+            "t3X8Eqi9m5Jr4UL54eBCVtT2j77Qv93ip7x", /* main-index: 3*/
+            "t3UFKHuPe6cfw8VgxAygq37pGy4HSKfuk8f", /* main-index: 4*/
+            "t3Usd8rSCSTbTn6aFL7oc1RSDmhKLdKJ1K4", /* main-index: 5*/
+            "t3QWZCzLjpbvCSAAPzkPkBbPgzpEqR5qMmr", /* main-index: 6*/
+            "t3KUUC6A1hxoqmz89B8kCDGFjGcWc6s7kTT", /* main-index: 7*/
+            "t3KJ6rFF6nEBpXvYUgcRzBqvFPvMH5adcfT", /* main-index: 8*/
+            "t3LMAiEmF4n2RR2ao3ADi94MQK4UqDtzHox", /* main-index: 9*/
+            "t3TRowBSHSvi32cob6cv3KHGMvYw4AevtHi", /* main-index: 10*/
+        };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
 };
