@@ -170,20 +170,9 @@ public:
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {
-            "t3eBgfGGB8EgQ9vBYnfVDWeRPnxryCbMq8h", /* main-index: 1*/
-            "t3MXSbLkCAmtWcVUGT3oRKw1L4hgfr7FCGA", /* main-index: 2*/
-            "t3MEkGZBvGSATHQ5dF2rvLFiqL6GYpnP56W", /* main-index: 3*/
-            "t3QzCBsaB3Nb8BEW3ukhsKjDwuKc9GDod6V", /* main-index: 4*/
-            "t3NqthbR9SUveqXgtENEcEufrrhx5u784SU", /* main-index: 5*/
-            "t3eSXfLMFjqypENZfqCb5zmubapiMtz9DNT", /* main-index: 6*/
-            "t3S3C2AExjmW5k3ZaK9UGTeRiojmEqmcc45", /* main-index: 7*/
-            "t3KiTAFfxUFLsW9UXm4xLwQRgAa8g2wyESC", /* main-index: 8*/
-            "t3JpAbVvm2dG4JKnwJR7GT5Kph2LSsbZgwi", /* main-index: 9*/
-            "t3UF79jsYpj4TByv8MHVgVkzJ8b59ez3iEn", /* main-index: 10*/
-            "t3gFLCshbGPJC9Rws94g8CLoLFD9UnFZzGj", /* main-index: 11*/
-            "t3bdwRAy4BAvsexhYE9VBvdtaZxzb88RyqT", /* main-index: 12*/
-            "t3Noo3g5LY4efnMNAjcmgKWZ1YuDAFg1fiJ", /* main-index: 13*/
-            "t3LhZ9wsmm72c37nFZVwoh9sKyacYgHeAZf", /* main-index: 14*/
+            "t3ZDPB9N9RPjShmqzQrPtgRu1DsZd7RGXeS", /* main-index: 1*/
+            "t3V6nGiVADeNdfsxC1rZRyRe5uTnRoiyEn6", /* main-index: 2*/
+            "t3ZrLvjx4toyKxQiqABa6Y4bFwdU3qRZbhr", /* main-index: 3*/
         };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
