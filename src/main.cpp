@@ -1431,7 +1431,7 @@ bool IsInitialBlockDownload()
     if (!state) {
         lockIBDState = true;
     }
-    return false;
+    return state;
 }
 
 bool fLargeWorkForkFound = false;
