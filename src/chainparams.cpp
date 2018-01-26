@@ -20,6 +20,49 @@ using namespace std;
 
 #include "chainparamsseeds.h"
 
+static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, const uint256& nNonce, const std::vector<unsigned char>& nSolution, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
+{
+    CMutableTransaction txNew;
+    txNew.nVersion = 1;
+    txNew.vin.resize(1);
+    txNew.vout.resize(1);
+    txNew.vin[0].scriptSig = CScript() << 520617983 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+    txNew.vout[0].nValue = genesisReward;
+    txNew.vout[0].scriptPubKey = genesisOutputScript;
+
+    CBlock genesis;
+    genesis.nTime    = nTime;
+    genesis.nBits    = nBits;
+    genesis.nNonce   = nNonce;
+    genesis.nSolution = nSolution;
+    genesis.nVersion = nVersion;
+    genesis.vtx.push_back(txNew);
+    genesis.hashPrevBlock.SetNull();
+    genesis.hashMerkleRoot = genesis.BuildMerkleTree();
+    return genesis;
+}
+
+/**
+ * Build the genesis block. Note that the output of its generation
+ * transaction cannot be spent since it did not originally exist in the
+ * database (and is in any case of zero value).
+ *
+ * >>> from pyblake2 import blake2s
+ * >>> blake2s(b'The Economist 2018-01-12 Known unknown: Another crypto-currency is born. BTC#503839 0000000000000000004d36fd42f981a9ac1330715488a274b29503e1f7ed5337 ETH#4895317 x54096447e0a988064db2e6dc19a17f216d9bd66bbf697ad5716899d1cf2be780 DJIA close on 10 Jan 2018: 15,134.68').hexdigest()
+ *
+ * CBlock(hash=00040fe8, ver=4, hashPrevBlock=00000000000000, hashMerkleRoot=c4eaa5, nTime=1477641360, nBits=1f07ffff, nNonce=4695, vtx=1)
+ *   CTransaction(hash=c4eaa5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+ *     CTxIn(COutPoint(000000, -1), coinbase 04ffff071f0104455a6361736830623963346565663862376363343137656535303031653335303039383462366665613335363833613763616331343161303433633432303634383335643334)
+ *     CTxOut(nValue=0.00000000, scriptPubKey=0x5F1DF16B2B704C8A578D0B)
+ *   vMerkleTree: c4eaa5
+ */
+static CBlock CreateGenesisBlock(uint32_t nTime, const uint256& nNonce, const std::vector<unsigned char>& nSolution, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
+{
+    const char* pszTimestamp = "cdb44b93f35e78c9a750a523615ef22a72c499805de2b20833cd2eaaa0977027";
+    const CScript genesisOutputScript = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
+    return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nSolution, nBits, nVersion, genesisReward);
+}
+
 /**
  * Main network
  */
@@ -39,7 +82,7 @@ public:
         strNetworkID = "main";
         strCurrencyUnits = "ASF";
         consensus.fCoinbaseMustBeProtected = true;
-        consensus.nSubsidySlowStartInterval = 20000;
+        consensus.nSubsidySlowStartInterval = 100;
         consensus.nSubsidyHalvingInterval = 840000;
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
@@ -66,29 +109,11 @@ public:
         nEquihashN = N;
         nEquihashK = K;
 
-        /**
-         * Build the genesis block. Note that the output of its generation
-         * transaction cannot be spent since it did not originally exist in the
-         * database (and is in any case of zero value).
-         *
-         * >>> from pyblake2 import blake2s
-         * >>> blake2s(b'The Economist 2018-01-12 Known unknown: Another crypto-currency is born. BTC#503839 0000000000000000004d36fd42f981a9ac1330715488a274b29503e1f7ed5337 ETH#4895317 x54096447e0a988064db2e6dc19a17f216d9bd66bbf697ad5716899d1cf2be780 DJIA close on 10 Jan 2018: 15,134.68').hexdigest()
-         */
-        const char* pszTimestamp = "cdb44b93f35e78c9a750a523615ef22a72c499805de2b20833cd2eaaa0977027";
-        CMutableTransaction txNew;
-        txNew.vin.resize(1);
-        txNew.vout.resize(1);
-        txNew.vin[0].scriptSig = CScript() << 520617983 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 0;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
-        genesis.vtx.push_back(txNew);
-        genesis.hashPrevBlock.SetNull();
-        genesis.hashMerkleRoot = genesis.BuildMerkleTree();
-        genesis.nVersion = 4;
-        genesis.nTime    = 1515781463;
-        genesis.nBits    = 0x1f07ffff;
-        genesis.nNonce   = uint256S("0x000000000000000000000000000000000000000000000000000000000000058f");
-        genesis.nSolution = ParseHex("00a11b436d0d79706fcd079af85fe65e97443b03a5091fad4fa4848d22cdf7712399a71b70520b8838f807026939f417fdc2eb9cd166d54dddf7202afccb3c3b2a3797dceeec8d79c7a58c3c7d32adcd0553781f0a9a44b49f236c9f71fc68ed0fdc764e60dbfae52c2e509e029f985c6d353f83c702c24bf1c36a9080c938905c83c9b5dd63b758e46eedc4b7852b525338503ddeae47c7550a91a423869fe2cdd741e5da33781d027491d3fcd426d57ecd40f2d5dd280317a2fe76750543126e6a4f6893f47200a038f7b0553777953ed6063b67757772f661f4a0d776eee7387e2f8e3971541068efbdb0d5c3a0c6d2011c43b9f1e968f39579a00860510ad1cf485744fd2104578884bcdbf57302ac152bd6b9c6a8287f5279f3070c21fcc6c7b85cb67f1d2bcbbfee09065a8ab1196bb77669c69f64be42c61ea97e68fef01bcd84fa82e2ba9e135ecc8c57674900d8f43ba28df0cfda82902c384e31f01eb150f43c175287becbda3afceb90c5bbee6ca831fe009ff87512c5d36f62d1ae41236a927c55709c269070ba64482ea07b7eadcf31a39869744cd6744a9d2074d6202003151fef180ba975251f630384cd2cad77f41cbe6b0d69eabd4e774351ba484146af20315dbb9f6e9efc112c06f459876d3accb434e687ff748a110ef22c7e2392aa487dd8cfa8cf5af449194c41a6142d74912b04422e6aee0d5d95293821c068b2a78b74e51e067d11258c43db73fd7de78325592dcfb1699958ae9dcf0cea9a09960afe737999410504635d924946d517e30da0a61fc114d65cae70b4bfc94567d1c3bfd360710536f56efcd56d2cf98a66c85ccd4fb21dee58228707093c9d692b39dbf7ff622adda35639a619f84ce20d34afc83319db672a5040ef2534de055d3e5a9c8724a2f96c31b89d3be1c55270e3c900b142c5bcd20a013486da07886bd1682c831d7addd85cfa3528bc7a0b3f9c37e00673aa92e181e6891b1aa48138261e66100b63d42a2a2ae3e95151e935e08b551daa57dd3e1fd205b562b0d265e32ed47482ce2919f47993556a08665b0d25ccf45b228740d1e12fe3604bb5a429981d16d4c71b6611a7345365124661999361911e26c9229b829aab1baf6d3eb9a4870ede2855d56b7d91c03c97b7acf2d2ac7f0696e4411af52322f254def49401707c89022e4015ec5d70390c7e5998e8e75d8d08249a4e3e820e8d715101c631b4f6ee3e9e7bdaa6ee044f03e42193f97afce610ee72bba8e1f0195ff0331ee4c377692e6de1d9d8d2c67a614f19ce041e61560a30bbbc08d294fbb2c510ad13d773a2f8dd7d55110bee890c544c5f15fcecb2285ce4604612f9bd602e10ed73bad3dc7c6dca31e18bb3d7c82d19986a033728b051ddf0d8e533451156b6014c1445b967beaf4c030e5e7a4c9df5096caf634e30edc535c1f4beabb5042d9e0e7ddc3eb1f13b112ad029d06e431d1fb5f310e4a54bf8f01ae982c51147598be3da2f067454a727641f1bb7a523d53185352512300e1ddcad8f068d0fb24fd658b2a06bce1e62529a4a43e542cd78f0be169f374dbe903239d0c921946dc555416ff7d03d9616469d33ab8769cfecd371f0f29832e53372ca4e0c339c65d22e536cd3e5e3845d7da9a6de4d25dee6f5053f7fb9c79103cfe1e35426bd5e52b950af9245a73275d4fc9f4e09f9150dc450da333d8977806e50382fd8dec0476f2f5b8176f5e125e1921d9336b1fc3c66e45c3d1b6223394821c84e94e0878f80ab7f9f820b864308fd51b328bb65282ea6ccda1ad285188d220be574421fcf44f6b3de8101efe7fc21aa81decfd50b8dbf6ff29c30aefa73d1fc5725b6b5a511b9bd0c10de7c491b225f5b68f3f3b60a2cb6b91ce4cdb163");
+        genesis = CreateGenesisBlock(
+            1515781463,
+            uint256S("0x000000000000000000000000000000000000000000000000000000000000058f"),
+            ParseHex("00a11b436d0d79706fcd079af85fe65e97443b03a5091fad4fa4848d22cdf7712399a71b70520b8838f807026939f417fdc2eb9cd166d54dddf7202afccb3c3b2a3797dceeec8d79c7a58c3c7d32adcd0553781f0a9a44b49f236c9f71fc68ed0fdc764e60dbfae52c2e509e029f985c6d353f83c702c24bf1c36a9080c938905c83c9b5dd63b758e46eedc4b7852b525338503ddeae47c7550a91a423869fe2cdd741e5da33781d027491d3fcd426d57ecd40f2d5dd280317a2fe76750543126e6a4f6893f47200a038f7b0553777953ed6063b67757772f661f4a0d776eee7387e2f8e3971541068efbdb0d5c3a0c6d2011c43b9f1e968f39579a00860510ad1cf485744fd2104578884bcdbf57302ac152bd6b9c6a8287f5279f3070c21fcc6c7b85cb67f1d2bcbbfee09065a8ab1196bb77669c69f64be42c61ea97e68fef01bcd84fa82e2ba9e135ecc8c57674900d8f43ba28df0cfda82902c384e31f01eb150f43c175287becbda3afceb90c5bbee6ca831fe009ff87512c5d36f62d1ae41236a927c55709c269070ba64482ea07b7eadcf31a39869744cd6744a9d2074d6202003151fef180ba975251f630384cd2cad77f41cbe6b0d69eabd4e774351ba484146af20315dbb9f6e9efc112c06f459876d3accb434e687ff748a110ef22c7e2392aa487dd8cfa8cf5af449194c41a6142d74912b04422e6aee0d5d95293821c068b2a78b74e51e067d11258c43db73fd7de78325592dcfb1699958ae9dcf0cea9a09960afe737999410504635d924946d517e30da0a61fc114d65cae70b4bfc94567d1c3bfd360710536f56efcd56d2cf98a66c85ccd4fb21dee58228707093c9d692b39dbf7ff622adda35639a619f84ce20d34afc83319db672a5040ef2534de055d3e5a9c8724a2f96c31b89d3be1c55270e3c900b142c5bcd20a013486da07886bd1682c831d7addd85cfa3528bc7a0b3f9c37e00673aa92e181e6891b1aa48138261e66100b63d42a2a2ae3e95151e935e08b551daa57dd3e1fd205b562b0d265e32ed47482ce2919f47993556a08665b0d25ccf45b228740d1e12fe3604bb5a429981d16d4c71b6611a7345365124661999361911e26c9229b829aab1baf6d3eb9a4870ede2855d56b7d91c03c97b7acf2d2ac7f0696e4411af52322f254def49401707c89022e4015ec5d70390c7e5998e8e75d8d08249a4e3e820e8d715101c631b4f6ee3e9e7bdaa6ee044f03e42193f97afce610ee72bba8e1f0195ff0331ee4c377692e6de1d9d8d2c67a614f19ce041e61560a30bbbc08d294fbb2c510ad13d773a2f8dd7d55110bee890c544c5f15fcecb2285ce4604612f9bd602e10ed73bad3dc7c6dca31e18bb3d7c82d19986a033728b051ddf0d8e533451156b6014c1445b967beaf4c030e5e7a4c9df5096caf634e30edc535c1f4beabb5042d9e0e7ddc3eb1f13b112ad029d06e431d1fb5f310e4a54bf8f01ae982c51147598be3da2f067454a727641f1bb7a523d53185352512300e1ddcad8f068d0fb24fd658b2a06bce1e62529a4a43e542cd78f0be169f374dbe903239d0c921946dc555416ff7d03d9616469d33ab8769cfecd371f0f29832e53372ca4e0c339c65d22e536cd3e5e3845d7da9a6de4d25dee6f5053f7fb9c79103cfe1e35426bd5e52b950af9245a73275d4fc9f4e09f9150dc450da333d8977806e50382fd8dec0476f2f5b8176f5e125e1921d9336b1fc3c66e45c3d1b6223394821c84e94e0878f80ab7f9f820b864308fd51b328bb65282ea6ccda1ad285188d220be574421fcf44f6b3de8101efe7fc21aa81decfd50b8dbf6ff29c30aefa73d1fc5725b6b5a511b9bd0c10de7c491b225f5b68f3f3b60a2cb6b91ce4cdb163"),
+            0x1f07ffff, 4, 0);
 
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0000363adb70e2cee5171918dc4ced36fa712abbb057b4807fff56d598b74be4"));
@@ -145,16 +170,20 @@ public:
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {
-            "t3WsmKEN6yeLqYi1MS71v743ynnWrppfTcS", /* main-index: 1*/
-            "t3Z5KvRfUVd9EaAeGKYvYCqLjFwDPkuJ4K9", /* main-index: 2*/
-            "t3X8Eqi9m5Jr4UL54eBCVtT2j77Qv93ip7x", /* main-index: 3*/
-            "t3UFKHuPe6cfw8VgxAygq37pGy4HSKfuk8f", /* main-index: 4*/
-            "t3Usd8rSCSTbTn6aFL7oc1RSDmhKLdKJ1K4", /* main-index: 5*/
-            "t3QWZCzLjpbvCSAAPzkPkBbPgzpEqR5qMmr", /* main-index: 6*/
-            "t3KUUC6A1hxoqmz89B8kCDGFjGcWc6s7kTT", /* main-index: 7*/
-            "t3KJ6rFF6nEBpXvYUgcRzBqvFPvMH5adcfT", /* main-index: 8*/
-            "t3LMAiEmF4n2RR2ao3ADi94MQK4UqDtzHox", /* main-index: 9*/
-            "t3TRowBSHSvi32cob6cv3KHGMvYw4AevtHi", /* main-index: 10*/
+            "t3eBgfGGB8EgQ9vBYnfVDWeRPnxryCbMq8h", /* main-index: 1*/
+            "t3MXSbLkCAmtWcVUGT3oRKw1L4hgfr7FCGA", /* main-index: 2*/
+            "t3MEkGZBvGSATHQ5dF2rvLFiqL6GYpnP56W", /* main-index: 3*/
+            "t3QzCBsaB3Nb8BEW3ukhsKjDwuKc9GDod6V", /* main-index: 4*/
+            "t3NqthbR9SUveqXgtENEcEufrrhx5u784SU", /* main-index: 5*/
+            "t3eSXfLMFjqypENZfqCb5zmubapiMtz9DNT", /* main-index: 6*/
+            "t3S3C2AExjmW5k3ZaK9UGTeRiojmEqmcc45", /* main-index: 7*/
+            "t3KiTAFfxUFLsW9UXm4xLwQRgAa8g2wyESC", /* main-index: 8*/
+            "t3JpAbVvm2dG4JKnwJR7GT5Kph2LSsbZgwi", /* main-index: 9*/
+            "t3UF79jsYpj4TByv8MHVgVkzJ8b59ez3iEn", /* main-index: 10*/
+            "t3gFLCshbGPJC9Rws94g8CLoLFD9UnFZzGj", /* main-index: 11*/
+            "t3bdwRAy4BAvsexhYE9VBvdtaZxzb88RyqT", /* main-index: 12*/
+            "t3Noo3g5LY4efnMNAjcmgKWZ1YuDAFg1fiJ", /* main-index: 13*/
+            "t3LhZ9wsmm72c37nFZVwoh9sKyacYgHeAZf", /* main-index: 14*/
         };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
@@ -164,16 +193,22 @@ static CMainParams mainParams;
 /**
  * Testnet (v3)
  */
-class CTestNetParams : public CMainParams {
+class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
         strCurrencyUnits = "TAS";
+        consensus.nSubsidySlowStartInterval = 100;
+        consensus.nSubsidyHalvingInterval = 840000;
         consensus.nMajorityEnforceBlockUpgrade = 51;
         consensus.nMajorityRejectBlockOutdated = 75;
         consensus.nMajorityWindow = 400;
         consensus.powLimit = uint256S("07ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
+        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
+        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
+        consensus.nPowTargetSpacing = 2.5 * 60;
         pchMessageStart[0] = 0xfa;
         pchMessageStart[1] = 0x1a;
         pchMessageStart[2] = 0xf9;
@@ -181,15 +216,19 @@ public:
         vAlertPubKey = ParseHex("044e7a1553392325c871c5ace5d6ad73501c66f4c185d6b0453cf45dec5a1322e705c672ac1a27ef7cdaf588c10effdf50ed5f95f85f2f54a5f6159fca394ed0c6");
         nDefaultPort = 18086;
         nPruneAfterHeight = 1000;
+        const size_t N = 200, K = 9;
+        BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
+        nEquihashN = N;
+        nEquihashK = K;
 
-        //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1515732992;
-        genesis.nBits = 0x2007ffff;
-        genesis.nNonce = uint256S("0x0000000000000000000000000000000000000000000000000000000000000006");
-        genesis.nSolution = ParseHex("00a6a51259c3f6732481e2d035197218b7a69504461d04335503cd69759b2d02bd2b53a9653f42cb33c608511c953673fa9da76170958115fe92157ad3bb5720d927f18e09459bf5c6072973e143e20f9bdf0584058c96b7c2234c7565f100d5eea083ba5d3dbaff9f0681799a113e7beff4a611d2b49590563109962baa149b628aae869af791f2f70bb041bd7ebfa658570917f6654a142b05e7ec0289a4f46470be7be5f693b90173eaaa6e84907170f32602204f1f4e1c04b1830116ffd0c54f0b1caa9a5698357bd8aa1f5ac8fc93b405265d824ba0e49f69dab5446653927298e6b7bdc61ee86ff31c07bde86331b4e500d42e4e50417e285502684b7966184505b885b42819a88469d1e9cf55072d7f3510f85580db689302eab377e4e11b14a91fdd0df7627efc048934f0aff8e7eb77eb17b3a95de13678004f2512293891d8baf8dde0ef69be520a58bbd6038ce899c9594cf3e30b8c3d9c7ecc832d4c19a6212747b50724e6f70f6451f78fd27b58ce43ca33b1641304a916186cfbe7dbca224f55d08530ba851e4df22baf7ab7078e9cbea46c0798b35a750f54103b0cdd08c81a6505c4932f6bfbd492a9fced31d54e98b6370d4c96600552fcf5b37780ed18c8787d03200963600db297a8f05dfa551321d17b9917edadcda51e274830749d133ad226f8bb6b94f13b4f77e67b35b71f52112ce9ba5da706ad9573584a2570a4ff25d29ab9761a06bdcf2c33638bf9baf2054825037881c14adf3816ba0cbd0fca689aad3ce16f2fe362c98f48134a9221765d939f0b49677d1c2447e56b46859f1810e2cf23e82a53e0d44f34dae932581b3b7f49eaec59af872cf9de757a964f7b33d143a36c270189508fcafe19398e4d2966948164d40556b05b7ff532f66f5d1edc41334ef742f78221dfe0c7ae2275bb3f24c89ae35f00afeea4e6ed187b866b209dc6e83b660593fce7c40e143beb07ac86c56f39e895385924667efe3a3f031938753c7764a2dbeb0a643fd359c46e614873fd0424e435fa7fac083b9a41a9d6bf7e284eee537ea7c50dd239f359941a43dc982745184bf3ee31a8dc850316aa9c6b66d6985acee814373be3458550659e1a06287c3b3b76a185c5cb93e38c1eebcf34ff072894b6430aed8d34122dafd925c46a515cca79b0269c92b301890ca6b0dc8b679cdac0f23318c105de73d7a46d16d2dad988d49c22e9963c117960bdc70ef0db6b091cf09445a516176b7f6d58ec29539166cc8a38bbff387acefffab2ea5faad0e8bb70625716ef0edf61940733c25993ea3de9f0be23d36e7cb8da10505f9dc426cd0e6e5b173ab4fff8c37e1f1fb56d1ea372013d075e0934c6919393cfc21395eea20718fad03542a4162a9ded66c814ad8320b2d7c2da3ecaf206da34c502db2096d1c46699a91dd1c432f019ad434e2c1ce507f91104f66f491fed37b225b8e0b2888c37276cfa0468fc13b8d593fd9a2675f0f5b20b8a15f8fa7558176a530d6865738ddb25d3426dab905221681cf9da0e0200eea5b2eba3ad3a5237d2a391f9074bf1779a2005cee43eec2b058511532635e0fea61664f531ac2b356f40db5c5d275a4cf5c82d468976455af4e3362cc8f71aa95e71d394aff3ead6f7101279f95bcd8a0fedce1d21cb3c9f6dd3b182fce0db5d6712981b651f29178a24119968b14783cafa713bc5f2a65205a42e4ce9dc7ba462bdb1f3e4553afc15f5f39998fdb53e7e231e3e520a46943734a007c2daa1eda9f495791657eefcac5c32833936e568d06187857ed04d7b97167ae207c5c5ae54e528c36016a984235e9c5b2f0718d7b3aa93c7822ccc772580b6599671b3c02ece8a21399abd33cfd3028790133167d0a97e7de53dc8ff");
+        genesis = CreateGenesisBlock(
+            1515732992,
+            uint256S("0x0000000000000000000000000000000000000000000000000000000000000006"),
+            ParseHex("00a6a51259c3f6732481e2d035197218b7a69504461d04335503cd69759b2d02bd2b53a9653f42cb33c608511c953673fa9da76170958115fe92157ad3bb5720d927f18e09459bf5c6072973e143e20f9bdf0584058c96b7c2234c7565f100d5eea083ba5d3dbaff9f0681799a113e7beff4a611d2b49590563109962baa149b628aae869af791f2f70bb041bd7ebfa658570917f6654a142b05e7ec0289a4f46470be7be5f693b90173eaaa6e84907170f32602204f1f4e1c04b1830116ffd0c54f0b1caa9a5698357bd8aa1f5ac8fc93b405265d824ba0e49f69dab5446653927298e6b7bdc61ee86ff31c07bde86331b4e500d42e4e50417e285502684b7966184505b885b42819a88469d1e9cf55072d7f3510f85580db689302eab377e4e11b14a91fdd0df7627efc048934f0aff8e7eb77eb17b3a95de13678004f2512293891d8baf8dde0ef69be520a58bbd6038ce899c9594cf3e30b8c3d9c7ecc832d4c19a6212747b50724e6f70f6451f78fd27b58ce43ca33b1641304a916186cfbe7dbca224f55d08530ba851e4df22baf7ab7078e9cbea46c0798b35a750f54103b0cdd08c81a6505c4932f6bfbd492a9fced31d54e98b6370d4c96600552fcf5b37780ed18c8787d03200963600db297a8f05dfa551321d17b9917edadcda51e274830749d133ad226f8bb6b94f13b4f77e67b35b71f52112ce9ba5da706ad9573584a2570a4ff25d29ab9761a06bdcf2c33638bf9baf2054825037881c14adf3816ba0cbd0fca689aad3ce16f2fe362c98f48134a9221765d939f0b49677d1c2447e56b46859f1810e2cf23e82a53e0d44f34dae932581b3b7f49eaec59af872cf9de757a964f7b33d143a36c270189508fcafe19398e4d2966948164d40556b05b7ff532f66f5d1edc41334ef742f78221dfe0c7ae2275bb3f24c89ae35f00afeea4e6ed187b866b209dc6e83b660593fce7c40e143beb07ac86c56f39e895385924667efe3a3f031938753c7764a2dbeb0a643fd359c46e614873fd0424e435fa7fac083b9a41a9d6bf7e284eee537ea7c50dd239f359941a43dc982745184bf3ee31a8dc850316aa9c6b66d6985acee814373be3458550659e1a06287c3b3b76a185c5cb93e38c1eebcf34ff072894b6430aed8d34122dafd925c46a515cca79b0269c92b301890ca6b0dc8b679cdac0f23318c105de73d7a46d16d2dad988d49c22e9963c117960bdc70ef0db6b091cf09445a516176b7f6d58ec29539166cc8a38bbff387acefffab2ea5faad0e8bb70625716ef0edf61940733c25993ea3de9f0be23d36e7cb8da10505f9dc426cd0e6e5b173ab4fff8c37e1f1fb56d1ea372013d075e0934c6919393cfc21395eea20718fad03542a4162a9ded66c814ad8320b2d7c2da3ecaf206da34c502db2096d1c46699a91dd1c432f019ad434e2c1ce507f91104f66f491fed37b225b8e0b2888c37276cfa0468fc13b8d593fd9a2675f0f5b20b8a15f8fa7558176a530d6865738ddb25d3426dab905221681cf9da0e0200eea5b2eba3ad3a5237d2a391f9074bf1779a2005cee43eec2b058511532635e0fea61664f531ac2b356f40db5c5d275a4cf5c82d468976455af4e3362cc8f71aa95e71d394aff3ead6f7101279f95bcd8a0fedce1d21cb3c9f6dd3b182fce0db5d6712981b651f29178a24119968b14783cafa713bc5f2a65205a42e4ce9dc7ba462bdb1f3e4553afc15f5f39998fdb53e7e231e3e520a46943734a007c2daa1eda9f495791657eefcac5c32833936e568d06187857ed04d7b97167ae207c5c5ae54e528c36016a984235e9c5b2f0718d7b3aa93c7822ccc772580b6599671b3c02ece8a21399abd33cfd3028790133167d0a97e7de53dc8ff"),
+            0x2007ffff, 4, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
-//        cout << "consensus.hashGenesisBlock: " << consensus.hashGenesisBlock.ToString();
         assert(consensus.hashGenesisBlock == uint256S("0x4a1f23fdbbeac87b8ef8b5eb983e512fd3296308df018e168e64726ff94487a0"));
+        assert(genesis.hashMerkleRoot == uint256S("0xdf6fc210ea76d364af851fd7ce5479f717cb8f4a1a4e577f15722933b532875b"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -260,7 +299,7 @@ static CTestNetParams testNetParams;
 /**
  * Regression test
  */
-class CRegTestParams : public CTestNetParams {
+class CRegTestParams : public CChainParams {
 public:
     CRegTestParams() {
         strNetworkID = "regtest";
@@ -272,27 +311,31 @@ public:
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
         consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f");
+        consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
         consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
         consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
+        consensus.nPowTargetSpacing = 2.5 * 60;
+
         pchMessageStart[0] = 0xaa;
         pchMessageStart[1] = 0xe8;
         pchMessageStart[2] = 0x3f;
         pchMessageStart[3] = 0x5f;
+        nDefaultPort = 18344;
         nMaxTipAge = 24 * 60 * 60;
+        nPruneAfterHeight = 1000;
         const size_t N = 48, K = 5;
         BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
         nEquihashN = N;
         nEquihashK = K;
-        genesis.nTime = 1296688602;
-        genesis.nBits = 0x200f0f0f;
-        genesis.nNonce = uint256S("0x0000000000000000000000000000000000000000000000000000000000000009");
-        genesis.nSolution = ParseHex("01936b7db1eb4ac39f151b8704642d0a8bda13ec547d54cd5e43ba142fc6d8877cab07b3");
+        genesis = CreateGenesisBlock(
+            1296688602,
+            uint256S("0x0000000000000000000000000000000000000000000000000000000000000009"),
+            ParseHex("01936b7db1eb4ac39f151b8704642d0a8bda13ec547d54cd5e43ba142fc6d8877cab07b3"),
+            0x200f0f0f, 4, 0);
         consensus.hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 18344;
-//        cout << "consensus.hashGenesisBlock: " << consensus.hashGenesisBlock.ToString();
         assert(consensus.hashGenesisBlock == uint256S("0x733004c9c3731f0f4ccf19d77544ee624b9664c334ae787280bbad84cf9bf873"));
-        nPruneAfterHeight = 1000;
+        assert(genesis.hashMerkleRoot == uint256S("df6fc210ea76d364af851fd7ce5479f717cb8f4a1a4e577f15722933b532875b"));
 
         vFixedSeeds.clear(); //! Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  //! Regtest mode doesn't have any DNS seeds.
@@ -309,6 +352,17 @@ public:
             0,
             0
         };
+
+        // These prefixes are the same as the testnet prefixes
+        base58Prefixes[PUBKEY_ADDRESS]     = {0x1D,0x25};
+        base58Prefixes[SCRIPT_ADDRESS]     = {0x1C,0xBA};
+        base58Prefixes[SECRET_KEY]         = {0xEF};
+        // do not rely on these BIP32 prefixes; they are not specified and may change
+        base58Prefixes[EXT_PUBLIC_KEY]     = {0x04,0x35,0x87,0xCF};
+        base58Prefixes[EXT_SECRET_KEY]     = {0x04,0x35,0x83,0x94};
+        base58Prefixes[ZCPAYMENT_ADDRRESS] = {0x16,0xB6};
+        base58Prefixes[ZCVIEWING_KEY]      = {0xA8,0xAC,0x0C};
+        base58Prefixes[ZCSPENDING_KEY]     = {0xAC,0x08};
 
 //        // Founders reward script expects a vector of 2-of-3 multisig addresses
 //        vFoundersRewardAddress = { "t2FwcEhFdNXuFMv1tcYwaBJtYVtMj8b1uTg" };
@@ -378,7 +432,7 @@ CScript CChainParams::GetFoundersRewardScriptAtHeight(int nHeight) const {
     CBitcoinAddress address(GetFoundersRewardAddressAtHeight(nHeight).c_str());
     assert(address.IsValid());
     assert(address.IsScript());
-    CScriptID scriptID = get<CScriptID>(address.Get()); // Get() returns a boost variant
+    CScriptID scriptID = boost::get<CScriptID>(address.Get()); // Get() returns a boost variant
     CScript script = CScript() << OP_HASH160 << ToByteVector(scriptID) << OP_EQUAL;
     return script;
 }

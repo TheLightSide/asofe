@@ -3,13 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "transaction.h"
+#include "primitives/transaction.h"
 
-#include "../hash.h"
-#include "../tinyformat.h"
-#include "../utilstrencodings.h"
-#include "../zcash/JoinSplit.hpp"
-#include "../amount.h"
+#include "hash.h"
+#include "tinyformat.h"
+#include "utilstrencodings.h"
 
 JSDescription::JSDescription(ZCJoinSplit& params,
             const uint256& pubKeyHash,

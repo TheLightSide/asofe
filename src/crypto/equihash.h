@@ -6,8 +6,8 @@
 #ifndef BITCOIN_EQUIHASH_H
 #define BITCOIN_EQUIHASH_H
 
-#include "sha256.h"
-#include "../utilstrencodings.h"
+#include "crypto/sha256.h"
+#include "utilstrencodings.h"
 
 #include "sodium.h"
 

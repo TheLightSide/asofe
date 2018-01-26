@@ -13,7 +13,7 @@
 #include "timedata.h"
 #include "util.h"
 #include "version.h"
-#include "univalue/include/univalue.h"
+#include <univalue.h>
 
 #include <boost/foreach.hpp>
 

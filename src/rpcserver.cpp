@@ -13,7 +13,7 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "asyncrpcqueue.h"
-#include "univalue/include/univalue.h"
+#include <univalue.h>
 
 #include <memory>
 
@@ -73,7 +73,7 @@ void RPCTypeCheck(const UniValue& params,
                   bool fAllowNull)
 {
     size_t i = 0;
-    BOOST_FOREACH(UniValue::VType t, typesExpected)
+    for(UniValue::VType t: typesExpected)
     {
         if (params.size() <= i)
             break;
@@ -93,7 +93,7 @@ void RPCTypeCheckObj(const UniValue& o,
                   const map<string, UniValue::VType>& typesExpected,
                   bool fAllowNull)
 {
-    BOOST_FOREACH(const PAIRTYPE(string, UniValue::VType)& t, typesExpected)
+    for(const PAIRTYPE(string, UniValue::VType)& t: typesExpected)
     {
         const UniValue& v = find_value(o, t.first);
         if (!fAllowNull && v.isNull())
@@ -113,7 +113,7 @@ CAmount AmountFromValue(const UniValue& value)
     if (!value.isNum() && !value.isStr())
         throw JSONRPCError(RPC_TYPE_ERROR, "Amount is not a number or string");
     CAmount amount;
-    if (!ParseFixedPoint(value.getValStr(), 8, &amount))
+    if (!ParseFixedPoint(value.getValStr(), 2, &amount))
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
     if (!MoneyRange(amount))
         throw JSONRPCError(RPC_TYPE_ERROR, "Amount out of range");
@@ -127,7 +127,7 @@ UniValue ValueFromAmount(const CAmount& amount)
     int64_t quotient = n_abs / COIN;
     int64_t remainder = n_abs % COIN;
     return UniValue(UniValue::VNUM,
-            strprintf("%s%d.%08d", sign ? "-" : "", quotient, remainder));
+            strprintf("%s%d.%d", sign ? "-" : "", quotient, remainder));
 }
 
 uint256 ParseHashV(const UniValue& v, string strName)
@@ -141,10 +141,12 @@ uint256 ParseHashV(const UniValue& v, string strName)
     result.SetHex(strHex);
     return result;
 }
+
 uint256 ParseHashO(const UniValue& o, string strKey)
 {
     return ParseHashV(find_value(o, strKey), strKey);
 }
+
 vector<unsigned char> ParseHexV(const UniValue& v, string strName)
 {
     string strHex;
@@ -154,6 +156,7 @@ vector<unsigned char> ParseHexV(const UniValue& v, string strName)
         throw JSONRPCError(RPC_INVALID_PARAMETER, strName+" must be hexadecimal string (not '"+strHex+"')");
     return ParseHex(strHex);
 }
+
 vector<unsigned char> ParseHexO(const UniValue& o, string strKey)
 {
     return ParseHexV(find_value(o, strKey), strKey);
@@ -162,7 +165,6 @@ vector<unsigned char> ParseHexO(const UniValue& o, string strKey)
 /**
  * Note: This interface may still be subject to change.
  */
-
 std::string CRPCTable::help(const std::string& strCommand) const
 {
     string strRet;
@@ -174,7 +176,7 @@ std::string CRPCTable::help(const std::string& strCommand) const
         vCommands.push_back(make_pair(mi->second->category + mi->first, mi->second));
     sort(vCommands.begin(), vCommands.end());
 
-    BOOST_FOREACH(const PAIRTYPE(string, const CRPCCommand*)& command, vCommands)
+    for(const PAIRTYPE(string, const CRPCCommand*)& command: vCommands)
     {
         const CRPCCommand *pcmd = command.second;
         string strMethod = pcmd->name;
@@ -244,11 +246,11 @@ UniValue stop(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "stop\n"
-            "\nStop Zcash server.");
+            "\nStop Asofe server.");
     // Event loop will exit after current HTTP requests have been handled, so
     // this reply will get back to the client.
     StartShutdown();
-    return "Zcash server stopping";
+    return "Asofe server stopping";
 }
 
 /**

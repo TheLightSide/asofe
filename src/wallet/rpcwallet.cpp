@@ -998,27 +998,31 @@ UniValue sendmany(const UniValue& params, bool fHelp)
 
     CAmount totalAmount = 0;
     vector<string> keys = sendTo.getKeys();
-    BOOST_FOREACH(const string& name_, keys)
+    for(const string& name_: keys)
     {
         CBitcoinAddress address(name_);
-        if (!address.IsValid())
+        if (!address.IsValid()) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid Zcash address: ")+name_);
+        }
 
-        if (setAddress.count(address))
+        if (setAddress.count(address)) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+name_);
+        }
         setAddress.insert(address);
 
         CScript scriptPubKey = GetScriptForDestination(address.Get());
         CAmount nAmount = AmountFromValue(sendTo[name_]);
-        if (nAmount <= 0)
+        if (nAmount <= 0) {
             throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount for send");
+        }
         totalAmount += nAmount;
 
         bool fSubtractFeeFromAmount = false;
         for (size_t idx = 0; idx < subtractFeeFromAmount.size(); idx++) {
             const UniValue& addr = subtractFeeFromAmount[idx];
-            if (addr.get_str() == name_)
+            if (addr.get_str() == name_) {
                 fSubtractFeeFromAmount = true;
+            }
         }
 
         CRecipient recipient = {scriptPubKey, nAmount, fSubtractFeeFromAmount};
@@ -1029,8 +1033,9 @@ UniValue sendmany(const UniValue& params, bool fHelp)
 
     // Check funds
     CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, ISMINE_SPENDABLE);
-    if (totalAmount > nBalance)
+    if (totalAmount > nBalance) {
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
+    }
 
     // Send
     CReserveKey keyChange(pwalletMain);
@@ -1038,10 +1043,12 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     int nChangePosRet = -1;
     string strFailReason;
     bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePosRet, strFailReason);
-    if (!fCreated)
+    if (!fCreated) {
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strFailReason);
-    if (!pwalletMain->CommitTransaction(wtx, keyChange))
+    }
+    if (!pwalletMain->CommitTransaction(wtx, keyChange)) {
         throw JSONRPCError(RPC_WALLET_ERROR, "Transaction commit failed");
+    }
 
     return wtx.GetHash().GetHex();
 }

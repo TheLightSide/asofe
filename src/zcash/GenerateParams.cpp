@@ -1,6 +1,7 @@
+#include "zcash/JoinSplit.hpp"
+
 #include <iostream>
-#include "../crypto/common.h"
-#include "JoinSplit.hpp"
+#include "crypto/common.h"
 
 int main(int argc, char **argv)
 {
