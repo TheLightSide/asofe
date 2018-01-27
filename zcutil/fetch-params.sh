@@ -39,6 +39,35 @@ EOF
         "$SPROUT_URL/$filename"
 }
 
+function fetch_ipfs {
+    if [ -z "$IPFSCMD" ] || ! [ -z "$ZC_DISABLE_IPFS" ]; then
+        return 1
+    fi
+
+    local filename="$1"
+    local dlname="$2"
+
+    cat <<EOF
+
+Retrieving (ipfs): $SPROUT_IPFS/$filename
+EOF
+
+    ipfs get --output "$dlname" "$SPROUT_IPFS/$filename"
+}
+
+function fetch_failure {
+    cat >&2 <<EOF
+
+Failed to fetch the Zcash zkSNARK parameters!
+Try installing one of the following programs and make sure you're online:
+
+ * ipfs
+ * wget
+
+EOF
+    exit 1
+}
+
 function fetch_params {
     local filename="$1"
     local output="$2"
