@@ -3144,6 +3144,10 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
         bool found = false;
 
         for(const CTxOut& output: block.vtx[0].vout) {
+            int hh = nHeight;
+            CAmount ca = output.nValue;
+            CAmount xx = GetBlockSubsidy(nHeight, consensusParams);
+
             if (output.scriptPubKey == Params().GetFoundersRewardScriptAtHeight(nHeight)) {
                 if (output.nValue == (GetBlockSubsidy(nHeight, consensusParams) / 5)) {
                     found = true;
