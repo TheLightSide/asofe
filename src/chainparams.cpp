@@ -170,9 +170,9 @@ public:
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {
-            "t3ZDPB9N9RPjShmqzQrPtgRu1DsZd7RGXeS", /* main-index: 1*/
-            "t3V6nGiVADeNdfsxC1rZRyRe5uTnRoiyEn6", /* main-index: 2*/
-            "t3ZrLvjx4toyKxQiqABa6Y4bFwdU3qRZbhr", /* main-index: 3*/
+            "t3cpdUrkLT1gtBNfZHWMiYfoJ1tVVDi8God", /* main-index: 1*/
+            "t3awYqc9noDGMUc3M9SixrFmgWMjJYQkdZj", /* main-index: 2*/
+            "t3QmWNEoavVnxJhjf9ib5MfZxGSpdT22BFS", /* main-index: 3*/
         };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
