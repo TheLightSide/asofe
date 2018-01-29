@@ -2907,21 +2907,27 @@ CAmount CWallet::GetMinimumFee(unsigned int nTxBytes, unsigned int nConfirmTarge
     // payTxFee is user-set "I want to pay this much"
     CAmount nFeeNeeded = payTxFee.GetFee(nTxBytes);
     // user selected total at least (default=true)
-    if (fPayAtLeastCustomFee && nFeeNeeded > 0 && nFeeNeeded < payTxFee.GetFeePerK())
+    if (fPayAtLeastCustomFee && nFeeNeeded > 0 && nFeeNeeded < payTxFee.GetFeePerK()) {
         nFeeNeeded = payTxFee.GetFeePerK();
+    }
     // User didn't set: use -txconfirmtarget to estimate...
-    if (nFeeNeeded == 0)
+    if (nFeeNeeded == 0) {
         nFeeNeeded = pool.estimateFee(nConfirmTarget).GetFee(nTxBytes);
+    }
     // ... unless we don't have enough mempool data, in which case fall
     // back to a hard-coded fee
-    if (nFeeNeeded == 0)
+    if (nFeeNeeded == 0) {
         nFeeNeeded = minTxFee.GetFee(nTxBytes);
+    }
     // prevent user from paying a non-sense fee (like 1 satoshi): 0 < fee < minRelayFee
-    if (nFeeNeeded < ::minRelayTxFee.GetFee(nTxBytes))
+    if (nFeeNeeded < ::minRelayTxFee.GetFee(nTxBytes)) {
         nFeeNeeded = ::minRelayTxFee.GetFee(nTxBytes);
+    }
     // But always obey the maximum
-    if (nFeeNeeded > maxTxFee)
+    if (nFeeNeeded < maxTxFee) {
         nFeeNeeded = maxTxFee;
+    }
+
     return nFeeNeeded;
 }
 
