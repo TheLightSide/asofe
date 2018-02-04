@@ -161,17 +161,20 @@ public:
 //        };
 
         checkpointData = (Checkpoints::CCheckpointData) {
-            boost::assign::map_list_of ( 0, consensus.hashGenesisBlock),
-            genesis.nTime,
-            0,
-            0
+            boost::assign::map_list_of
+                ( 0, consensus.hashGenesisBlock)
+                (2500, uint256S("0x0002f67a10f7e44772c823b1c814e90df17d69bb7cfe07689118993a5627ba36")),
+            1517715263,
+            4406,
+            1015
         };
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {
-            "t3cpdUrkLT1gtBNfZHWMiYfoJ1tVVDi8God", /* main-index: 1*/
-            "t3awYqc9noDGMUc3M9SixrFmgWMjJYQkdZj", /* main-index: 2*/
-            "t3QmWNEoavVnxJhjf9ib5MfZxGSpdT22BFS", /* main-index: 3*/
+            "t3gGcAEAZrK8ZFTkZxNVPsU65MjdHbzBRn3", /* main-index: 1*/
+            "t3Qm6EKTAevyyCz3DGoC9gHP1zhKrgin9Ky", /* main-index: 2*/
+            "t3VKceXDRh7LXqVs5cAzZkDZTGfhLdUtAj7", /* main-index: 3*/
+            "t3WAG1h22nDBTW5ACCGxqWCfiWBvixWGWtR", /* main-index: 4*/
         };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
