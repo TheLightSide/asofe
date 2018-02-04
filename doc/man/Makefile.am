@@ -1,1 +1,1 @@
-dist_man1_MANS=zcashd.1 zcash-cli.1 zcash-fetch-params.1 zcash-tx.1
+dist_man1_MANS=asofed.1 asofe-cli.1 asofe-fetch-params.1 asofe-tx.1

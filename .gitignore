@@ -2,10 +2,10 @@
 *.deb
 *.exe
 src/bitcoin
-src/zcashd
-src/zcash-cli
-src/zcash-gtest
-src/zcash-tx
+src/asofed
+src/asofe-cli
+src/asofe-gtest
+src/asofe-tx
 src/test/test_bitcoin
 
 # Zcash utilities
