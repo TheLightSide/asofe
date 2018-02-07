@@ -67,8 +67,8 @@ $0 [ --enable-lcov || --disable-tests ] [ --disable-mining ] [ --disable-rust ] 
   library required for AMQP support. This library is not built by default.
   It must be passed after the test/mining/Rust arguments, if present.
 
-  If --disable-libs is passed, Zcash is configured to not build any libraries like
-  'libzcashconsensus'.
+  If --disable-libs is passed, Asofe is configured to not build any libraries like
+  'libasofeconsensus'.
 EOF
     exit 0
 fi

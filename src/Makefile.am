@@ -77,8 +77,8 @@ EXTRA_LIBRARIES += libbitcoin_proton.a
 endif
 
 if BUILD_BITCOIN_LIBS
-lib_LTLIBRARIES = libzcashconsensus.la
-LIBZCASH_CONSENSUS=libzcashconsensus.la
+lib_LTLIBRARIES = libasofeconsensus.la
+LIBZCASH_CONSENSUS=libasofeconsensus.la
 else
 LIBZCASH_CONSENSUS=
 endif
@@ -532,7 +532,7 @@ libasofe_a_CPPFLAGS += -DMONTGOMERY_OUTPUT
 # zcashconsensus library #
 if BUILD_BITCOIN_LIBS
 include_HEADERS = script/zcashconsensus.h
-libzcashconsensus_la_SOURCES = \
+libasofeconsensus_la_SOURCES = \
   crypto/equihash.cpp \
   crypto/hmac_sha512.cpp \
   crypto/ripemd160.cpp \
@@ -549,13 +549,13 @@ libzcashconsensus_la_SOURCES = \
   utilstrencodings.cpp
 
 if GLIBC_BACK_COMPAT
-  libzcashconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libasofeconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libzcashconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libzcashconsensus_la_LIBADD = $(LIBSECP256K1)
-libzcashconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
-libzcashconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libasofeconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libasofeconsensus_la_LIBADD = $(LIBSECP256K1)
+libasofeconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
+libasofeconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #
