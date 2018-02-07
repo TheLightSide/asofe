@@ -6,7 +6,7 @@
 #define ZCASH_AMQP_AMQPABSTRACTNOTIFIER_H
 
 #include "amqpconfig.h"
-#include "../primitives/transaction.h"
+#include "primitives/transaction.h"
 
 class CBlockIndex;
 class AMQPAbstractNotifier;

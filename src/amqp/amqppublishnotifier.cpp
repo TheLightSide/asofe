@@ -3,8 +3,8 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "amqppublishnotifier.h"
-#include "../main.h"
-#include "../util.h"
+#include "main.h"
+#include "util.h"
 
 #include "amqpsender.h"
 

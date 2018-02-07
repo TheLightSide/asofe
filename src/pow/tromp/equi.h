@@ -5,7 +5,7 @@
 #ifdef __APPLE__
 #include "pow/tromp/osx_barrier.h"
 #endif
-#include "../../compat/endian.h"
+#include "compat/endian.h"
 
 #include <stdint.h> // for types uint32_t,uint64_t
 #include <string.h> // for functions memset

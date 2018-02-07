@@ -5,10 +5,10 @@
 #include "amqpnotificationinterface.h"
 #include "amqppublishnotifier.h"
 
-#include "../version.h"
-#include "../main.h"
-#include "../streams.h"
-#include "../util.h"
+#include "version.h"
+#include "main.h"
+#include "streams.h"
+#include "util.h"
 
 // AMQP 1.0 Support
 //
