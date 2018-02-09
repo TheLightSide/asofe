@@ -6,7 +6,7 @@ set -e
 set -x
 
 BUILD_PATH="/tmp/zcbuild"
-PACKAGE_NAME="zcash"
+PACKAGE_NAME="asofe"
 SRC_PATH=`pwd`
 SRC_DEB=$SRC_PATH/contrib/debian
 SRC_DOC=$SRC_PATH/doc
@@ -40,7 +40,7 @@ chmod 0755 -R $BUILD_DIR/*
 # Copy binaries
 cp $SRC_PATH/src/asofed $DEB_BIN
 cp $SRC_PATH/src/asofe-cli $DEB_BIN
-cp $SRC_PATH/zcutil/fetch-params.sh $DEB_BIN/zcash-fetch-params
+cp $SRC_PATH/zcutil/fetch-params.sh $DEB_BIN/asofe-fetch-params
 # Copy docs
 cp $SRC_PATH/doc/release-notes/release-notes-1.0.0.md $DEB_DOC/changelog
 cp $SRC_DEB/changelog $DEB_DOC/changelog.Debian
@@ -63,7 +63,7 @@ gzip --best -n $DEB_MAN/asofe-fetch-params.1
 cd $SRC_PATH/contrib
 
 # Create the control file
-dpkg-shlibdeps $DEB_BIN/asofed $DEB_BIN/zcash-cli
+dpkg-shlibdeps $DEB_BIN/asofed $DEB_BIN/asofe-cli
 dpkg-gencontrol -P$BUILD_DIR -v$DEBVERSION
 
 # Create the Debian package
