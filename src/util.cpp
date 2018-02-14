@@ -15,7 +15,7 @@
 #include "sync.h"
 #include "utilstrencodings.h"
 #include "utiltime.h"
-
+#include <boost/process.hpp>
 #include <stdarg.h>
 
 #if (defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__))
@@ -823,7 +823,7 @@ boost::filesystem::path GetTempPath() {
 
 void runCommand(const std::string& strCommand)
 {
-    int nErr = ::system(strCommand.c_str());
+    int nErr = boost::process::system(strCommand.c_str());
     if (nErr)
         LogPrintf("runCommand error: system(%s) returned %d\n", strCommand, nErr);
 }
