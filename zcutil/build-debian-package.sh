@@ -56,7 +56,7 @@ cp $SRC_PATH/contrib/asofe-cli.bash-completion $DEB_CMP/asofe-cli
 # Gzip files
 gzip --best -n $DEB_DOC/changelog
 gzip --best -n $DEB_DOC/changelog.Debian
-gzip --best -n $DEB_MAN/asofe.1
+gzip --best -n $DEB_MAN/asofed.1
 gzip --best -n $DEB_MAN/asofe-cli.1
 gzip --best -n $DEB_MAN/asofe-fetch-params.1
 
