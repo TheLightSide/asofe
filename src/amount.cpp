@@ -21,7 +21,8 @@ CFeeRate::CFeeRate(const CAmount& nFeePaid, size_t nSize)
 
 CAmount CFeeRate::GetFee(size_t nSize) const
 {
-    CAmount nFee = nSatoshisPerK*nSize / 1000;
+	double calcSatoshi = static_cast<double>(nSatoshisPerK) * nSize / 100000;
+    CAmount nFee = (calcSatoshi < 1 && calcSatoshi != 0) ? 1 : calcSatoshi;
 
     if (nFee == 0 && nSatoshisPerK > 0) {
         nFee = nSatoshisPerK;

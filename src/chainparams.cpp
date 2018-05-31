@@ -18,10 +18,17 @@
 #include <iostream>
 using namespace std;
 
+#include <iostream>
+
 #include "chainparamsseeds.h"
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, const uint256& nNonce, const std::vector<unsigned char>& nSolution, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
+    // To create a genesis block for a new chain which is Overwintered:
+    //   txNew.nVersion = OVERWINTER_TX_VERSION
+    //   txNew.fOverwintered = true
+    //   txNew.nVersionGroupId = OVERWINTER_VERSION_GROUP_ID
+    //   txNew.nExpiryHeight = <default value>
     CMutableTransaction txNew;
     txNew.nVersion = 1;
     txNew.vin.resize(1);
@@ -163,10 +170,14 @@ public:
         checkpointData = (Checkpoints::CCheckpointData) {
             boost::assign::map_list_of
                 ( 0, consensus.hashGenesisBlock)
-                (2500, uint256S("0x0002f67a10f7e44772c823b1c814e90df17d69bb7cfe07689118993a5627ba36")),
-            1517715263,
-            4406,
-            1015
+                (2500, uint256S("0x0002f67a10f7e44772c823b1c814e90df17d69bb7cfe07689118993a5627ba36"))
+                (5000, uint256S("0x0000007dfb44c8174bdb6298a919d86067cd1ce9bc99f99720bcb32b0f4ae868"))
+                (10000, uint256S("0x00017aed2440e9c6d2dc98a022c11200034fdcb2cf2fca9dc6d3be38f0791581"))
+                (30000, uint256S("0x0000e03c7a6848f46b2fd5864b686aa2773a44d4b7365f0cb1444344ec3a4c7d"))
+                (45000, uint256S("0x0002116dd75aad4ea470ccd9e487a3991e576e42c41cf9bc725e3313cdbaeb44")),
+            1527083962,
+            53739,
+            687
         };
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
@@ -212,12 +223,13 @@ public:
         nEquihashK = K;
 
         genesis = CreateGenesisBlock(
-            1515732992,
-            uint256S("0x0000000000000000000000000000000000000000000000000000000000000006"),
-            ParseHex("00a6a51259c3f6732481e2d035197218b7a69504461d04335503cd69759b2d02bd2b53a9653f42cb33c608511c953673fa9da76170958115fe92157ad3bb5720d927f18e09459bf5c6072973e143e20f9bdf0584058c96b7c2234c7565f100d5eea083ba5d3dbaff9f0681799a113e7beff4a611d2b49590563109962baa149b628aae869af791f2f70bb041bd7ebfa658570917f6654a142b05e7ec0289a4f46470be7be5f693b90173eaaa6e84907170f32602204f1f4e1c04b1830116ffd0c54f0b1caa9a5698357bd8aa1f5ac8fc93b405265d824ba0e49f69dab5446653927298e6b7bdc61ee86ff31c07bde86331b4e500d42e4e50417e285502684b7966184505b885b42819a88469d1e9cf55072d7f3510f85580db689302eab377e4e11b14a91fdd0df7627efc048934f0aff8e7eb77eb17b3a95de13678004f2512293891d8baf8dde0ef69be520a58bbd6038ce899c9594cf3e30b8c3d9c7ecc832d4c19a6212747b50724e6f70f6451f78fd27b58ce43ca33b1641304a916186cfbe7dbca224f55d08530ba851e4df22baf7ab7078e9cbea46c0798b35a750f54103b0cdd08c81a6505c4932f6bfbd492a9fced31d54e98b6370d4c96600552fcf5b37780ed18c8787d03200963600db297a8f05dfa551321d17b9917edadcda51e274830749d133ad226f8bb6b94f13b4f77e67b35b71f52112ce9ba5da706ad9573584a2570a4ff25d29ab9761a06bdcf2c33638bf9baf2054825037881c14adf3816ba0cbd0fca689aad3ce16f2fe362c98f48134a9221765d939f0b49677d1c2447e56b46859f1810e2cf23e82a53e0d44f34dae932581b3b7f49eaec59af872cf9de757a964f7b33d143a36c270189508fcafe19398e4d2966948164d40556b05b7ff532f66f5d1edc41334ef742f78221dfe0c7ae2275bb3f24c89ae35f00afeea4e6ed187b866b209dc6e83b660593fce7c40e143beb07ac86c56f39e895385924667efe3a3f031938753c7764a2dbeb0a643fd359c46e614873fd0424e435fa7fac083b9a41a9d6bf7e284eee537ea7c50dd239f359941a43dc982745184bf3ee31a8dc850316aa9c6b66d6985acee814373be3458550659e1a06287c3b3b76a185c5cb93e38c1eebcf34ff072894b6430aed8d34122dafd925c46a515cca79b0269c92b301890ca6b0dc8b679cdac0f23318c105de73d7a46d16d2dad988d49c22e9963c117960bdc70ef0db6b091cf09445a516176b7f6d58ec29539166cc8a38bbff387acefffab2ea5faad0e8bb70625716ef0edf61940733c25993ea3de9f0be23d36e7cb8da10505f9dc426cd0e6e5b173ab4fff8c37e1f1fb56d1ea372013d075e0934c6919393cfc21395eea20718fad03542a4162a9ded66c814ad8320b2d7c2da3ecaf206da34c502db2096d1c46699a91dd1c432f019ad434e2c1ce507f91104f66f491fed37b225b8e0b2888c37276cfa0468fc13b8d593fd9a2675f0f5b20b8a15f8fa7558176a530d6865738ddb25d3426dab905221681cf9da0e0200eea5b2eba3ad3a5237d2a391f9074bf1779a2005cee43eec2b058511532635e0fea61664f531ac2b356f40db5c5d275a4cf5c82d468976455af4e3362cc8f71aa95e71d394aff3ead6f7101279f95bcd8a0fedce1d21cb3c9f6dd3b182fce0db5d6712981b651f29178a24119968b14783cafa713bc5f2a65205a42e4ce9dc7ba462bdb1f3e4553afc15f5f39998fdb53e7e231e3e520a46943734a007c2daa1eda9f495791657eefcac5c32833936e568d06187857ed04d7b97167ae207c5c5ae54e528c36016a984235e9c5b2f0718d7b3aa93c7822ccc772580b6599671b3c02ece8a21399abd33cfd3028790133167d0a97e7de53dc8ff"),
+            1527360769,
+            uint256S("0x000000000000000000000000000000000000000000000000000000000000001f"),
+            ParseHex("004a9480d062bb6d7ec40037bdd18615b122daab4e22ceffa2a95b4d33a18d125f9e68a45e01bcb89cb207bfa72dd70c19dce94b782189c9aa3a8f0df76d415f994d8516e5e9e1987729e0afe1b0faa7c1da22b10f057f9ac50e9ee8ee02c17a836ee0553223d7b7301fb0a9e13ea48e9da2b3e52de6c75635f530fba13b1e8454301bc9ad6548af727654e360a6c8aa17e7b75ea56cc5b063cea33a4b864a6f6f943f55021d716f00ec9256ba8c75f99d79a1edc01a65ce304a554fc8132c6e0e83e328516264495b0a79ea6e7a099403ef0dedc085bdcaecffeee4d54f6ad6ec11a13915d37921e95622f15f70a36a15e27f80e21111aba25098eb091c4c334ef2f5c7ff56e12cdfe6a4b906bb33b5e43e118f675115e02db86f56e5fde396bebaa559827c27362feb9fdbb60d40dcda5172d5cfdae041bc772c291993d004646fa9950504cf33fa7449e22a9debde00c34809c84887a5420b63401c7331769e4bf95cac2075e5c5c6c9544ca1c3a4f73d51df9ab646bc1a350edc52165354aa12f6c0f665f0cdfc664eb7331df0113fd8c85531ea99d357418c9853a980cebddb9a16076f7cee8b6b5e35d516724a4c1e79625363b2db6a386c261f5aecd9398352f5c7504c0949dcd1fcf1060f7c96dd068d599c9ccfe1b1278db761f63c72fd5d141a77b6595db59f4f5416b7645d5b69e2f74f52400864e7161203d55a9f4da1c916e5a8810f2c5ff2c41b9487d64a28904fa43ea89c9758a27e8860fb1ade09f1f6a18b629f874c2110a878f4a04848442ac41768f9146e81a729a99cd4669516de8ac255c9b338ab0a656b4dbecbc8de89ac71e19d3ec4d985cd3120a836d45d320997a56dad8eec4d7e67221fa4313d5cab11907aba3f282e857de983477859bb8ddeb3511c0a2ba2ec9ffce6aaa1c1b33369fde821554890dcbbe2006d5133efdc6fd3ab04c0e0c119a0faaca619bac015e92484138f53e5cb14c6009f7beeaa0892d270c218d79d2393eaf1b189f75481f2ad5a1dd270103acf1d55e8fda76b492f8911071f16fb415e7157f9790c0318f2cc830c70e0e46682394d21c9ed8b3e3f17e757901da431bb4b69dcdd66c8cd435bcdcb84dd54c242b41493b913d4f9c2e5e73727fb639ae77e7e0f2f5c6be4cdacae5787bf8be5e4a8cd30cdd789952b4e06ec4aee4e6d0557ea0c9a04a56bd6b29b73797d900f665617a3c6e653d26ed1222ca34ebef7f9bab2100ad7c8d2369a401950b7da8c09fa67d2f99efb7fa50e16e1e481cc7d12dc7d336db55fc8def90878cdad245232f385e49e03b30537dddfe09b9af56679f32d60677f675b2db849978a46571af942afd0f59ea4be2d851dba4261c2bb7116486484df53f7a090fead1d302c8cc9a25d9475f34e74ed76ad600e48203792e407a7793960099f19ee0a1233fb7fa8a8cd7b3451ca248592b908108422ebcdc398075fe325e87959965b39bd0656db1c471155630895d5731956699854c6fc5112ff80935da2358ea0bb35d2dece5b74d4bfba970d1096df32dfd4a9a17041ef48ad9bb0efc47e56770d2d8557328689356177665bb677fbf620b158f244105e8f8ebbcc34271425c2c739b75e0ab4031be50a26381b827a1ff981bc46433e02e4bdae170f318e6f0aec37dfc59bad0f8e859279357f59d5c01a37c654172efbfe1319c58cd449237d785de6223896da4e260d3c1d48ec4dde39e1d1343e1424cc468ed03f2bdb18c9ba151827a499b0ed53674d3535d4ef789c377a0dec020bfc4cf96dd929250518d9201dc6a76eae160e9c3c23aa718149ba84078fbac077f9f78e3598f3107106081be346ebecfc13d5a447d9424345f6c0033fa2b63f95e2165b1f7798cd1ed75c663a5757f3a9"),
             0x2007ffff, 4, 0);
+
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x4a1f23fdbbeac87b8ef8b5eb983e512fd3296308df018e168e64726ff94487a0"));
+        assert(consensus.hashGenesisBlock == uint256S("0x004637063fc77812beccba106a36787c93738ff263dfa5397e860049dfb7db9a"));
         assert(genesis.hashMerkleRoot == uint256S("0xdf6fc210ea76d364af851fd7ce5479f717cb8f4a1a4e577f15722933b532875b"));
 
         vFixedSeeds.clear();
@@ -266,22 +278,17 @@ public:
             0
         };
 
-//        // Founders reward script expects a vector of 2-of-3 multisig addresses
-//        vFoundersRewardAddress = {
-//            "t2UNzUUx8mWBCRYPRezvA363EYXyEpHokyi", "t2N9PH9Wk9xjqYg9iin1Ua3aekJqfAtE543", "t2NGQjYMQhFndDHguvUw4wZdNdsssA6K7x2", "t2ENg7hHVqqs9JwU5cgjvSbxnT2a9USNfhy",
-//            "t2BkYdVCHzvTJJUTx4yZB8qeegD8QsPx8bo", "t2J8q1xH1EuigJ52MfExyyjYtN3VgvshKDf", "t2Crq9mydTm37kZokC68HzT6yez3t2FBnFj", "t2EaMPUiQ1kthqcP5UEkF42CAFKJqXCkXC9",
-//            "t2F9dtQc63JDDyrhnfpzvVYTJcr57MkqA12", "t2LPirmnfYSZc481GgZBa6xUGcoovfytBnC", "t26xfxoSw2UV9Pe5o3C8V4YybQD4SESfxtp", "t2D3k4fNdErd66YxtvXEdft9xuLoKD7CcVo",
-//            "t2DWYBkxKNivdmsMiivNJzutaQGqmoRjRnL", "t2C3kFF9iQRxfc4B9zgbWo4dQLLqzqjpuGQ", "t2MnT5tzu9HSKcppRyUNwoTp8MUueuSGNaB", "t2AREsWdoW1F8EQYsScsjkgqobmgrkKeUkK",
-//            "t2Vf4wKcJ3ZFtLj4jezUUKkwYR92BLHn5UT", "t2K3fdViH6R5tRuXLphKyoYXyZhyWGghDNY", "t2VEn3KiKyHSGyzd3nDw6ESWtaCQHwuv9WC", "t2F8XouqdNMq6zzEvxQXHV1TjwZRHwRg8gC",
-//            "t2BS7Mrbaef3fA4xrmkvDisFVXVrRBnZ6Qj", "t2FuSwoLCdBVPwdZuYoHrEzxAb9qy4qjbnL", "t2SX3U8NtrT6gz5Db1AtQCSGjrpptr8JC6h", "t2V51gZNSoJ5kRL74bf9YTtbZuv8Fcqx2FH",
-//            "t2FyTsLjjdm4jeVwir4xzj7FAkUidbr1b4R", "t2EYbGLekmpqHyn8UBF6kqpahrYm7D6N1Le", "t2NQTrStZHtJECNFT3dUBLYA9AErxPCmkka", "t2GSWZZJzoesYxfPTWXkFn5UaxjiYxGBU2a",
-//            "t2RpffkzyLRevGM3w9aWdqMX6bd8uuAK3vn", "t2JzjoQqnuXtTGSN7k7yk5keURBGvYofh1d", "t2AEefc72ieTnsXKmgK2bZNckiwvZe3oPNL", "t2NNs3ZGZFsNj2wvmVd8BSwSfvETgiLrD8J",
-//            "t2ECCQPVcxUCSSQopdNquguEPE14HsVfcUn", "t2JabDUkG8TaqVKYfqDJ3rqkVdHKp6hwXvG", "t2FGzW5Zdc8Cy98ZKmRygsVGi6oKcmYir9n", "t2DUD8a21FtEFn42oVLp5NGbogY13uyjy9t",
-//            "t2UjVSd3zheHPgAkuX8WQW2CiC9xHQ8EvWp", "t2TBUAhELyHUn8i6SXYsXz5Lmy7kDzA1uT5", "t2Tz3uCyhP6eizUWDc3bGH7XUC9GQsEyQNc", "t2NysJSZtLwMLWEJ6MH3BsxRh6h27mNcsSy",
-//            "t2KXJVVyyrjVxxSeazbY9ksGyft4qsXUNm9", "t2J9YYtH31cveiLZzjaE4AcuwVho6qjTNzp", "t2QgvW4sP9zaGpPMH1GRzy7cpydmuRfB4AZ", "t2NDTJP9MosKpyFPHJmfjc5pGCvAU58XGa4",
-//            "t29pHDBWq7qN4EjwSEHg8wEqYe9pkmVrtRP", "t2Ez9KM8VJLuArcxuEkNRAkhNvidKkzXcjJ", "t2D5y7J5fpXajLbGrMBQkFg2mFN8fo3n8cX", "t2UV2wr1PTaUiybpkV3FdSdGxUJeZdZztyt",
-//            };
-//        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
+        // Founders reward script expects a vector of 2-of-3 multisig addresses
+        vFoundersRewardAddress = {
+            "t2AE7wYYbGBsCy2k5uQ98pEXCejfrtYMsE2", "t2FXXRJzp8tTdQ7eZYgy6eBDenLGt8kd4S8", "t2NKtdd3E5n4qfTSGqdqJkJdE3WhXehMvpy", "t2LHCNw3PJ9iUsaTGYYoPhUFRzVuhXazpVL",
+            "t2NatsPSF7DjBgAjpVynyrPi7uLroZTNKJQ", "t2Fhxh4rMrz4tWySJWrooF46K2Ubvbqp6oK", "t2MeSZuou85MdzqN1mmwjnpb94KttngBKvA", "t29PNzZWKXzrfs9MGEWQbsStgTbw6WBJaQ3",
+            "t2JXHvxR97tuKcc6t8gTuytZnBu7cqCMvSA", "t2SW68j2C3tKfoLvQKcmWpKVnJgUcbgqxcu", "t2RFjpco9XQFFnY4BAiEKCxSF9WJar8XdBR", "t2FZ9xN7uqrXM4t5VucbUXpAsbVGnuWH4Do",
+            "t2Q8WdkiHMh56TX8CMLcW7Q7LGvhBwe7z9x", "t2KG8eaXfrBRHva9h7qVBctM1fYrjDMcB1r", "t2AfNSGTYLhQhKZgHNUXUyHPeeGxNGnNrET", "t2T7w7oqF4YGJ75UWyxjte6fmzVcFbkzU7S",
+            "t28EzeaTP1GEZJxLdLNkqCEqH6fHTzRLHRA", "t28u2miwRRbF8cbSYqzy3UF5qbWZKHXMtud", "t2DxQhrQkZj8DLX3nRTRuiQVEXphA8BfdRY", "t2UxHJnaFqbj4DsMcWvWD1faBjBwvHT6tib",
+            "t27in9sVwn3B8DhPAF1mSR1v3uuxYekyvDi", "t2UdVhDKV3vbUeNcz9CwVtv6Cxt6kJFC5oB", "t2A3jMJw8zF1unXaSxZRP7Mc1ffb9a6HLHB", "t2LVg6DHhz93riry8pCUVixxTEkcYp7MpXJ",
+            "t2RDFYvdY5jWyuKEbKMhgxexyb1wMvscVJv", "t2HYjZdPqCqKY6986jiBXwgpbphQ4r1yYLi", "t2LYCfke6LmvfwYfJeTfXhY9zQ39X8CD9jM", "t2MFrMwVcmM2Yfqbmavv1oy3NkM8rtXMPib",
+            };
+        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
 };
 static CTestNetParams testNetParams;
