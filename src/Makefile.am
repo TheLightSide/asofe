@@ -480,7 +480,7 @@ asofe_cli_LDADD = \
   $(LIBZCASH_LIBS)
 #
 
-# zcash-tx binary #
+# asofe-tx binary #
 asofe_tx_SOURCES = bitcoin-tx.cpp
 asofe_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 asofe_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
