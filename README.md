@@ -1,4 +1,4 @@
-Asofe 1.0.15
+Asofe 1.0.16
 =============
 
 What is Asofe?
