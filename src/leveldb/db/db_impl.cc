@@ -264,7 +264,7 @@ void DBImpl::DeleteObsoleteFiles() {
         }
         Log(options_.info_log, "Delete type=%d #%lld\n",
             int(type),
-            static_cast<unsigned long long>(number));
+            static_cast<uint64_t>(number));
         env_->DeleteFile(dbname_ + "/" + filenames[i]);
       }
     }
@@ -399,7 +399,7 @@ Status DBImpl::RecoverLogFile(uint64_t log_number,
   log::Reader reader(file, &reporter, true/*checksum*/,
                      0/*initial_offset*/);
   Log(options_.info_log, "Recovering log #%llu",
-      (unsigned long long) log_number);
+      (uint64_t) log_number);
 
   // Read all the records and add to a memtable
   std::string scratch;
@@ -463,7 +463,7 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   pending_outputs_.insert(meta.number);
   Iterator* iter = mem->NewIterator();
   Log(options_.info_log, "Level-0 table #%llu: started",
-      (unsigned long long) meta.number);
+      (uint64_t) meta.number);
 
   Status s;
   {
@@ -473,8 +473,8 @@ Status DBImpl::WriteLevel0Table(MemTable* mem, VersionEdit* edit,
   }
 
   Log(options_.info_log, "Level-0 table #%llu: %lld bytes %s",
-      (unsigned long long) meta.number,
-      (unsigned long long) meta.file_size,
+      (uint64_t) meta.number,
+      (uint64_t) meta.file_size,
       s.ToString().c_str());
   delete iter;
   pending_outputs_.erase(meta.number);
@@ -696,9 +696,9 @@ void DBImpl::BackgroundCompaction() {
     }
     VersionSet::LevelSummaryStorage tmp;
     Log(options_.info_log, "Moved #%lld to level-%d %lld bytes %s: %s\n",
-        static_cast<unsigned long long>(f->number),
+        static_cast<uint64_t>(f->number),
         c->level() + 1,
-        static_cast<unsigned long long>(f->file_size),
+        static_cast<uint64_t>(f->file_size),
         status.ToString().c_str(),
         versions_->LevelSummary(&tmp));
   } else {
@@ -822,9 +822,9 @@ Status DBImpl::FinishCompactionOutputFile(CompactionState* compact,
     if (s.ok()) {
       Log(options_.info_log,
           "Generated table #%llu: %lld keys, %lld bytes",
-          (unsigned long long) output_number,
-          (unsigned long long) current_entries,
-          (unsigned long long) current_bytes);
+          (uint64_t) output_number,
+          (uint64_t) current_entries,
+          (uint64_t) current_bytes);
     }
   }
   return s;
@@ -838,7 +838,7 @@ Status DBImpl::InstallCompactionResults(CompactionState* compact) {
       compact->compaction->level(),
       compact->compaction->num_input_files(1),
       compact->compaction->level() + 1,
-      static_cast<long long>(compact->total_bytes));
+      static_cast<int64_t>(compact->total_bytes));
 
   // Add compaction outputs
   compact->compaction->AddInputDeletions(compact->compaction->edit());

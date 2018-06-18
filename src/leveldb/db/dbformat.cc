@@ -23,7 +23,7 @@ void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
 std::string ParsedInternalKey::DebugString() const {
   char buf[50];
   snprintf(buf, sizeof(buf), "' @ %llu : %d",
-           (unsigned long long) sequence,
+           (uint64_t) sequence,
            int(type));
   std::string result = "'";
   result += EscapeString(user_key.ToString());

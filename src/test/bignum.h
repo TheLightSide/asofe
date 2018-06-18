@@ -57,7 +57,7 @@ public:
         BN_clear_free(bn);
     }
 
-    CBigNum(long long n)          { bn = BN_new(); assert(bn); setint64(n); }
+    CBigNum(uint64_t n)          { bn = BN_new(); assert(bn); setint64(n); }
 
     explicit CBigNum(const std::vector<unsigned char>& vch)
     {
