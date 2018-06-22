@@ -913,8 +913,8 @@ std::string PrivacyInfo()
 std::string LicenseInfo()
 {
     return "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) 2009-%i The Bitcoin Core Developers"), COPYRIGHT_YEAR)) + "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) 2015-2017 The Zcash Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(_("Copyright (C) 2009-2015 The Bitcoin Core Developers")) + "\n" +
+           FormatParagraph(_("Copyright (C) 2015-2017 The Zcash Developers")) + "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2017-%i The Asofe Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +

@@ -69,20 +69,24 @@ static bool AppInitRPC(int argc, char* argv[])
     //
     ParseParameters(argc, argv);
     if (argc<2 || mapArgs.count("-?") || mapArgs.count("-h") || mapArgs.count("-help") || mapArgs.count("-version")) {
-        std::string strUsage = _("Zcash RPC client version") + " " + FormatFullVersion() + "\n" + PrivacyInfo();
+        std::string strUsage = _("Asofe RPC client version") + " " + FormatFullVersion() + "\n" + PrivacyInfo();
         if (!mapArgs.count("-version")) {
             strUsage += "\n" + _("Usage:") + "\n" +
-                  "  zcash-cli [options] <command> [params]  " + _("Send command to Zcash") + "\n" +
-                  "  zcash-cli [options] help                " + _("List commands") + "\n" +
-                  "  zcash-cli [options] help <command>      " + _("Get help for a command") + "\n";
+                  "  asofe-cli [options] <command> [params]  " + _("Send command to Asofe") + "\n" +
+                  "  asofe-cli [options] help                " + _("List commands") + "\n" +
+                  "  asofe-cli [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessageCli();
         } else {
             strUsage += LicenseInfo();
         }
 
-        fprintf(stdout, "%s", strUsage.c_str());
-        return false;
+		fprintf(stdout, "%s", strUsage.c_str());
+		if (argc < 2) {
+			fprintf(stderr, "Error: too few parameters\n");
+			return EXIT_FAILURE;
+		}
+		return EXIT_SUCCESS;
     }
     if (!boost::filesystem::is_directory(GetDataDir(false))) {
         fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", mapArgs["-datadir"].c_str());
