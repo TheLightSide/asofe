@@ -15,7 +15,7 @@ openssl ec -in data.pem -outform DER | tail -c 279 | xxd -p -c 279
 Get the public key in hex:
 openssl ec -in data.pem -pubout -outform DER | tail -c 65 | xxd -p -c 65
 
-Update the public keys found in chainparams.cpp.
+version.h.
 
 
 To send an alert message

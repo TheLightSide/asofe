@@ -4102,12 +4102,14 @@ std::string GetWarnings(const std::string& strFor)
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.");
+		LogPrintf("*** fLargeWorkForkFound %s\n", strRPC);
     }
     else if (fLargeWorkInvalidChainFound)
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
-    }
+		LogPrintf("*** fLargeWorkInvalidChainFound %s\n", strRPC);
+	}
 
     // Alerts
     {
@@ -4119,7 +4121,11 @@ std::string GetWarnings(const std::string& strFor)
             {
                 nPriority = alert.nPriority;
                 strStatusBar = alert.strStatusBar;
-                if (alert.nPriority >= ALERT_PRIORITY_SAFE_MODE) {
+
+				LogPrintf("*** alert.nPriority %s\n", alert.nPriority);
+				LogPrintf("*** ALERT_PRIORITY_SAFE_MODE %s\n", ALERT_PRIORITY_SAFE_MODE);
+				LogPrintf("*** alert.strRPCError %s\n", alert.strRPCError);
+				if (alert.nPriority >= ALERT_PRIORITY_SAFE_MODE) {
                     strRPC = alert.strRPCError;
                 }
             }
