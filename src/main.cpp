@@ -4107,7 +4107,7 @@ std::string GetWarnings(const std::string& strFor)
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
-    }
+	}
 
     // Alerts
     {
@@ -4119,7 +4119,8 @@ std::string GetWarnings(const std::string& strFor)
             {
                 nPriority = alert.nPriority;
                 strStatusBar = alert.strStatusBar;
-                if (alert.nPriority >= ALERT_PRIORITY_SAFE_MODE) {
+
+				if (alert.nPriority >= ALERT_PRIORITY_SAFE_MODE) {
                     strRPC = alert.strRPCError;
                 }
             }
