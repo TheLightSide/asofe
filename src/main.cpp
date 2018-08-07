@@ -2043,8 +2043,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     auto verifier = libzcash::ProofVerifier::Strict();
     auto disabledVerifier = libzcash::ProofVerifier::Disabled();
 
+    bool fCheckPOW = !fJustCheck && (pindex->nHeight != 0);
     // Check it again to verify JoinSplit proofs, and in case a previous version let a bad block in
-    if (!CheckBlock(block, state, fExpensiveChecks ? verifier : disabledVerifier, !fJustCheck, !fJustCheck))
+    if (!CheckBlock(block, state, fExpensiveChecks ? verifier : disabledVerifier, fCheckPOW, !fJustCheck))
         return false;
 
     // verify that the view's current state corresponds to the previous block
@@ -3064,7 +3065,28 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     assert(pindexPrev);
 
-    int nHeight = pindexPrev->nHeight+1;
+	long int nHeight = pindexPrev->nHeight + 1;
+
+	//Check EH solution size matches an acceptable N,K
+	size_t nSolSize = block.nSolution.size();
+
+	EHparameters ehparams[MAX_EH_PARAM_LIST_LEN]; //allocate on-stack space for parameters list
+	int listlength = validEHparameterList(ehparams, nHeight, chainParams);
+	int solutionInvalid = 1;
+	for(int i = 0; i < listlength; i++) {
+		LogPrint("pow", "ContextCheckBlockHeader index %d n:%d k:%d Solsize: %d \n",i, ehparams[i].n, ehparams[i].k , ehparams[i].nSolSize);
+		if(ehparams[i].nSolSize == nSolSize)
+			solutionInvalid = 0;
+	}
+
+	//Block will be validated prior to mining, and will have a zero length equihash solution. These need to be let through. Checkequihashsolution will catch them.
+	if(!nSolSize)
+		solutionInvalid = 0;
+
+	if(solutionInvalid) {
+		return state.DoS(100,error("ContextualCheckBlockHeader: Equihash solution size %d for block %d does not match a valid length", nSolSize, nHeight),
+						 REJECT_INVALID,"bad-equihash-solution-size");
+	}
 
     // Check proof of work
     if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
@@ -3251,7 +3273,7 @@ bool ProcessNewBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, bool
 {
     // Preliminary checks
     auto verifier = libzcash::ProofVerifier::Disabled();
-    bool checked = CheckBlock(*pblock, state, verifier);
+    bool checked = CheckBlock(*pblock, state, verifier, true, true);
 
     {
         LOCK(cs_main);
@@ -3652,7 +3674,7 @@ bool CVerifyDB::VerifyDB(CCoinsView *coinsview, int nCheckLevel, int nCheckDepth
         if (!ReadBlockFromDisk(block, pindex))
             return error("VerifyDB(): *** ReadBlockFromDisk failed at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
         // check level 1: verify block validity
-        if (nCheckLevel >= 1 && !CheckBlock(block, state, verifier))
+        if (nCheckLevel >= 1 && !CheckBlock(block, state, verifier, (pindex->nHeight > 0), true))
             return error("VerifyDB(): *** found bad block at %d, hash=%s\n", pindex->nHeight, pindex->GetBlockHash().ToString());
         // check level 2: verify undo validity
         if (nCheckLevel >= 2 && pindex) {

@@ -106,14 +106,14 @@ public:
         pchMessageStart[1] = 0xe9;
         pchMessageStart[2] = 0x27;
         pchMessageStart[3] = 0x64;
-        vAlertPubKey = ParseHex("045af234ec21695ab35a4b124e6cdc52609617d167af178336963356214aab6d6eea8eb2e79854804ec1abeed63e540087b50b085c8f99499c1712676d4aea6414");
+        vAlertPubKey = ParseHex("043d61d18bcf3f744f29dfdad90cda21884a0b4876ffc2ee9652e2d08a9eb125d62f76edeb5804fb477f58db2d0e12390f5c01a58414530bdae7f52b11bcaf2187");
         nDefaultPort = 8585;
         nMaxTipAge = 24 * 60 * 60;
         nPruneAfterHeight = 100000;
-        const size_t N = 200, K = 9;
-        BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
-        nEquihashN = N;
-        nEquihashK = K;
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 87300;
+        eh_epoch_2_startblock = 87300;
 
         genesis = CreateGenesisBlock(
             1515781463,
@@ -174,10 +174,11 @@ public:
                 (5000, uint256S("0x0000007dfb44c8174bdb6298a919d86067cd1ce9bc99f99720bcb32b0f4ae868"))
                 (10000, uint256S("0x00017aed2440e9c6d2dc98a022c11200034fdcb2cf2fca9dc6d3be38f0791581"))
                 (30000, uint256S("0x0000e03c7a6848f46b2fd5864b686aa2773a44d4b7365f0cb1444344ec3a4c7d"))
-                (45000, uint256S("0x0002116dd75aad4ea470ccd9e487a3991e576e42c41cf9bc725e3313cdbaeb44")),
-            1527083962,
-            53739,
-            687
+                (45000, uint256S("0x0002116dd75aad4ea470ccd9e487a3991e576e42c41cf9bc725e3313cdbaeb44"))
+                (84000, uint256S("0x000003bfc909af2d71ed8a4b6f184987a36220f430282603ddcbac19a7529dfe")),
+            1533055877,
+            131910,
+            904
         };
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
@@ -214,13 +215,13 @@ public:
         pchMessageStart[1] = 0x1a;
         pchMessageStart[2] = 0xf9;
         pchMessageStart[3] = 0xbf;
-        vAlertPubKey = ParseHex("048904be4e851b1ad473901ff4e3dcff5361873f1725358cfd8fd230d5e988f51ab9c245e4fb22a37e01d89177fc4acc2a2b18195c4ebe71825feadd31829d1464");
+        vAlertPubKey = ParseHex("0457808782cbfb5e78fa1cf8d07c0c2bc86746cf28bbc742bbd0b0002f5deea1311b45c3e756c776aea88e04f34d51494955552d7c01111519f6585df8f7658685");
         nDefaultPort = 18086;
         nPruneAfterHeight = 1000;
-        const size_t N = 200, K = 9;
-        BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
-        nEquihashN = N;
-        nEquihashK = K;
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 13322;
+        eh_epoch_2_startblock = 13322;
 
         genesis = CreateGenesisBlock(
             1527360769,
@@ -234,8 +235,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        // TODO change dnsseed for testnet
-//        vSeeds.push_back(CDNSSeedData("z.cash", "dnsseed.testnet.z.cash")); // Zcash
+        vSeeds.push_back(CDNSSeedData("asofe.org", "dnsseed.testnet.asofe.org"));
 
         // guarantees the first 2 characters, when base58 encoded, are "tm"
         base58Prefixes[PUBKEY_ADDRESS]     = {0x1D,0x25};
@@ -320,10 +320,10 @@ public:
         nDefaultPort = 18344;
         nMaxTipAge = 24 * 60 * 60;
         nPruneAfterHeight = 1000;
-        const size_t N = 48, K = 5;
-        BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
-        nEquihashN = N;
-        nEquihashK = K;
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 1;
+        eh_epoch_2_startblock = 1;
         genesis = CreateGenesisBlock(
             1296688602,
             uint256S("0x0000000000000000000000000000000000000000000000000000000000000009"),
@@ -360,9 +360,9 @@ public:
         base58Prefixes[ZCVIEWING_KEY]      = {0xA8,0xAC,0x0C};
         base58Prefixes[ZCSPENDING_KEY]     = {0xAC,0x08};
 
-//        // Founders reward script expects a vector of 2-of-3 multisig addresses
-//        vFoundersRewardAddress = { "t2FwcEhFdNXuFMv1tcYwaBJtYVtMj8b1uTg" };
-//        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
+        // Founders reward script expects a vector of 2-of-3 multisig addresses
+        vFoundersRewardAddress = { "t2FwcEhFdNXuFMv1tcYwaBJtYVtMj8b1uTg" };
+        assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
 };
 static CRegTestParams regTestParams;
@@ -436,4 +436,21 @@ CScript CChainParams::GetFoundersRewardScriptAtHeight(int nHeight) const {
 std::string CChainParams::GetFoundersRewardAddressAtIndex(int i) const {
     assert(i >= 0 && i < vFoundersRewardAddress.size());
     return vFoundersRewardAddress[i];
+}
+
+int validEHparameterList(EHparameters *ehparams, unsigned long blockheight, const CChainParams& params){
+    //if in overlap period, there will be two valid solutions, else 1.
+    //The upcoming version of EH is preferred so will always be first element
+    //returns number of elements in list
+    if(blockheight>=params.eh_epoch_2_start() && blockheight>params.eh_epoch_1_end()){
+        ehparams[0]=params.eh_epoch_2_params();
+        return 1;
+    }
+    if(blockheight<params.eh_epoch_2_start()){
+        ehparams[0]=params.eh_epoch_1_params();
+        return 1;
+    }
+    ehparams[0]=params.eh_epoch_2_params();
+    ehparams[1]=params.eh_epoch_1_params();
+    return 2;
 }
