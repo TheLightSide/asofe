@@ -1,4 +1,4 @@
-Asofe 1.0.16
+Asofe 1.1.0
 =============
 
 What is Asofe?
