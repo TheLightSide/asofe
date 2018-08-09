@@ -110,10 +110,10 @@ protected:
     long nMaxTipAge = 0;
     uint64_t nPruneAfterHeight = 0;
 
-	EHparameters eh_epoch_1 = eh200_9;
-	EHparameters eh_epoch_2 = eh144_5;
-	unsigned long eh_epoch_1_endblock = 87300;
-	unsigned long eh_epoch_2_startblock = 87000;
+	  EHparameters eh_epoch_1 = eh200_9;
+	  EHparameters eh_epoch_2 = eh144_5;
+	  unsigned long eh_epoch_1_endblock = 87300;
+	  unsigned long eh_epoch_2_startblock = 87000;
 
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
