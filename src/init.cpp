@@ -186,7 +186,7 @@ void Shutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("zcash-shutoff");
+    RenameThread("asofe-shutoff");
     mempool.AddTransactionsUpdated(1);
 
     StopHTTPRPC();
@@ -597,7 +597,7 @@ void CleanupBlockRevFiles()
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("zcash-loadblk");
+    RenameThread("asofe-loadblk");
     // -reindex
     if (fReindex) {
         CImportingNow imp;
@@ -680,9 +680,9 @@ static void ZC_LoadParams()
 
     if (!(boost::filesystem::exists(pk_path) && boost::filesystem::exists(vk_path))) {
         uiInterface.ThreadSafeMessageBox(strprintf(
-            _("Cannot find the Zcash network parameters in the following directory:\n"
+            _("Cannot find the Asofe network parameters in the following directory:\n"
               "%s\n"
-              "Please run 'zcash-fetch-params' or './zcutil/fetch-params.sh' and then restart."),
+              "Please run 'asofe-fetch-params' or './zcutil/fetch-params.sh' and then restart."),
                 ZC_GetParamsDir()),
             "", CClientUIInterface::MSG_ERROR);
         StartShutdown();

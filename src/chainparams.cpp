@@ -127,7 +127,6 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        // TODO Change seed adresses
         vSeeds.push_back(CDNSSeedData("asofe.org", "dnsseed.asofe.org")); // AsofeSeed
 
         // guarantees the first 2 characters, when base58 encoded, are "t1"
@@ -145,6 +144,8 @@ public:
         base58Prefixes[ZCVIEWING_KEY]      = {0xA8,0xAB,0xD3};
         // guarantees the first 2 characters, when base58 encoded, are "SK"
         base58Prefixes[ZCSPENDING_KEY]     = {0xAB,0x36};
+        // BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+        base58Prefixes[EXT_COIN_TYPE]      = {0x80,0x77,0x67,0x73};
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -175,10 +176,15 @@ public:
                 (10000, uint256S("0x00017aed2440e9c6d2dc98a022c11200034fdcb2cf2fca9dc6d3be38f0791581"))
                 (30000, uint256S("0x0000e03c7a6848f46b2fd5864b686aa2773a44d4b7365f0cb1444344ec3a4c7d"))
                 (45000, uint256S("0x0002116dd75aad4ea470ccd9e487a3991e576e42c41cf9bc725e3313cdbaeb44"))
-                (84000, uint256S("0x000003bfc909af2d71ed8a4b6f184987a36220f430282603ddcbac19a7529dfe")),
-            1533055877,
-            131910,
-            904
+                (84000, uint256S("0x000003bfc909af2d71ed8a4b6f184987a36220f430282603ddcbac19a7529dfe"))
+                (100000, uint256S("0x00001ced49203b79421a66d1bd2a2d9fe9afa93615a25b78cbae647cf673bdaa"))
+                (150000, uint256S("0x000468d914d76a1cc59a555eb32a5d7a9845e3013e246001a214829fd89f9cba"))
+                (170000, uint256S("0x0002c3b60f64bd4517cd0fe992595a6af9598ef768959dc6eeec1f06090248d6"))
+                (200000, uint256S("0x00000a0f39edc929eca105fbef1916d27e59e5f122c68647607de8f25d3428b4")),
+                (300000, uint256S("0x0001ba19d5089535d7bf228c90d39e453ff1a186e177553c53a3366e463efcb8"))
+            1568993934,
+            456246,
+            876
         };
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
@@ -187,6 +193,69 @@ public:
             "t3Qm6EKTAevyyCz3DGoC9gHP1zhKrgin9Ky", /* main-index: 2*/
             "t3VKceXDRh7LXqVs5cAzZkDZTGfhLdUtAj7", /* main-index: 3*/
             "t3WAG1h22nDBTW5ACCGxqWCfiWBvixWGWtR", /* main-index: 4*/
+            "t3V2p43aL5V6qaDsWoB8jpZKmd2dJQToRGD", /* main-index: 5*/
+            "t3RLiouTXNFadEZAH9JF4XgWsoLmZGimjrh", /* main-index: 6*/
+            "t3bPfH1ZJeYYHmGFdv8189nFp3m35nguJif", /* main-index: 7*/
+            "t3cUjHmV1V2hMrkwKpvPXG5oeCjMrBy1w5s", /* main-index: 8*/
+            "t3g5xFGmV2DFAtDcgb7uhwzmyXfi8vXEvea", /* main-index: 9*/
+            "t3bAT5XJhQEmNVNDbTpjoSdr3tbpQgoPKfa", /* main-index: 10*/
+            "t3XpSQZRwmUcQ5FYWGA8f7EPiLwg3tMfEEX", /* main-index: 11*/
+            "t3LYVsmMUKj6ghxeNUhPZky6pkJj3itzKXr", /* main-index: 12*/
+            "t3a4qfcWQfZGxrfn8JDybMg6hLHDkQwBQzB", /* main-index: 13*/
+            "t3VN7fRBQCsci1Sy45U6SaAGjXVdAdNpBKh", /* main-index: 14*/
+            "t3LGKDS2hydsQtaAGbbM9Xdg3enyaHvMTtc", /* main-index: 15*/
+            "t3XjUDesUTNu6BpWHuVpQ74Ptke1PTKwh11", /* main-index: 16*/
+            "t3KicwAdUEiA8y762SVZVeCZeQbQsZgrgqy", /* main-index: 17*/
+            "t3eEMT4Jx7MCDBDE21kUUh3SU7gurg4wjci", /* main-index: 18*/
+            "t3ZPeEnjUFXzYfdPgSGW6kyvEMB4buuPXfD", /* main-index: 19*/
+            "t3YnA8GTXb2ehB61GA74qiiaQo3F246tGfA", /* main-index: 20*/
+            "t3PVvtwQBTnWY8F1KVryty26B32u589Vc8D", /* main-index: 21*/
+            "t3d1NdVjSB7iQ3KnMsNgfqbuUyXHQH2o7Qj", /* main-index: 22*/
+            "t3XGAZswvVJ617nrEByrEsieLD8WB245KPy", /* main-index: 23*/
+            "t3QjiBpXNQC77P243zyRNdJiF5eWBSN1L5L", /* main-index: 24*/
+            "t3ZRJk7hXmRyZhN7UxjEMF3JhxUKYiWsBi7", /* main-index: 25*/
+            "t3S8VNV38NiP7B2btXBB7aLZP7oAtdQjHU2", /* main-index: 26*/
+            "t3bdJqKGd7gECWcCv1CE474Buf4VhxqeELo", /* main-index: 27*/
+            "t3U4jH1CfYEqvojA3A99hZXa5a1dJjEvxzK", /* main-index: 28*/
+            "t3fnnjBr4K8v35Y9svw8NxZZq9niHMZy7eT", /* main-index: 29*/
+            "t3W65fDBY7nz9JYykHbP1NCP5VRMXARxarM", /* main-index: 30*/
+            "t3YLqUYZmmnrRirwcPeqTyM825qP1JoiFS8", /* main-index: 31*/
+            "t3Q7c8aYwC6in2bddNW2LARN14NUJyRnD16", /* main-index: 32*/
+            "t3XQBGG5W7qDRWGWHN7ZaaSQ4PVfko76A62", /* main-index: 33*/
+            "t3euX5fYYJwt2kYeYPXc1vBpgqe28tVtXrS", /* main-index: 34*/
+            "t3hXVsaiyd5vn36ASLnAiGvJ34s8r1kXPu9", /* main-index: 35*/
+            "t3ZcAgok17hCQi3aDHMgMw9rLLfzVvJmpjT", /* main-index: 36*/
+            "t3Uig6wbU8w4kzYWcHsvwrW3rUytcf4usP2", /* main-index: 37*/
+            "t3YF1mzsSPyainKSx8DQiprmAy7ovy6sxDU", /* main-index: 38*/
+            "t3LmGWzC52Q4iK4qJwP5jeVr1QBx6cvPNNS", /* main-index: 39*/
+            "t3MGBWCwyerSigxiwKuPKrFtRbXvzWkAj9x", /* main-index: 40*/
+            "t3TKGtfKk9hHJ1p5PVWKgkuKKoPC44P34xw", /* main-index: 41*/
+            "t3SjDKHdZXfiuBGYeA1yY4ub8ifzibRVvgo", /* main-index: 42*/
+            "t3K5F1ZZY3CspL5EenEKivgDYxL9v9jTvDz", /* main-index: 43*/
+            "t3af5FWx9TXENbEb12MCUagM7M2QW5K2j3s", /* main-index: 44*/
+            "t3g1PwcEjKfQ9onikXVLSSJD8EYSfgZuaFj", /* main-index: 45*/
+            "t3e5s7W5vYnGetPeFnU8ud3bdQmnqAJQQEb", /* main-index: 46*/
+            "t3ZUo4mjogTEEJKZfe3MDCzE5kABU2PAKJv", /* main-index: 47*/
+            "t3WpmC7Vhwog8G7ZaxsxA1xsN7wR8XT8Adr", /* main-index: 48*/
+            "t3LHTHV743KseUiEgxnnXe5LANGvyCeVpsL", /* main-index: 49*/
+            "t3SNhsh3qTisJbNkH1NAfvZg41bS5Sg5gJF", /* main-index: 50*/
+//            "t3eFdihU5JqAHBpHrimhZc9gzPX4BKRFxhJ", /* main-index: 51*/
+//            "t3MJ2RSjf3VgzFh6JFvBshGkqM4Dr6w2pR8", /* main-index: 52*/
+//            "t3fJw4XsZKydyZi9iVE2USXyFekHVZvQ8f6", /* main-index: 53*/
+//            "t3acUAmhzVhpxTEoSXLuCFUywdWqwXQGWAY", /* main-index: 54*/
+//            "t3dx4r8L1QB2LahTighVxs7cvuvD3WXho52", /* main-index: 55*/
+//            "t3QyaLMMArizt5zy726rW7iw38bbZpRM8nD", /* main-index: 56*/
+//            "t3QsiG2B6FkkxcyBhk3vv4KbFZAzUHrxcEr", /* main-index: 57*/
+//            "t3eVVbe1HWQWcS2r4aD9HSv5CWHnJAed8qv", /* main-index: 58*/
+//            "t3PmqHEwm7m5KzjotfgqLTVWNZgZc5QSzcc", /* main-index: 59*/
+//            "t3eiZEwg3MwuNETPyCj7QhziWVRw9xhEmYi", /* main-index: 60*/
+//            "t3S8tAT2ifcutge4iHhdY7W1c3yu3JKUa8v", /* main-index: 61*/
+//            "t3h83rWPx6FPw2cUQKE3TvwaQ7ZbabqZLPV", /* main-index: 62*/
+//            "t3ZLCGDGSRqfFxrjjGdBua8Uu5Nor425q67", /* main-index: 63*/
+//            "t3c7ksfWG6a779NsU6xhmqCMQtW93t8fEt5", /* main-index: 64*/
+//            "t3NyRNoH2s5yVhkCBkZ6Q5JNLApTXiACLv8", /* main-index: 65*/
+//            "t3RpwTYsBoReWqAdQe8222T91wbAuhJmeZZ", /* main-index: 66*/
+//            "t3hRNQmv3rtjUj5knP7fCs3C4mLGZkc2C8i", /* main-index: 67*/
         };
         assert(vFoundersRewardAddress.size() <= consensus.GetLastFoundersRewardBlockHeight());
     }
@@ -252,6 +321,8 @@ public:
         base58Prefixes[ZCVIEWING_KEY]      = {0xA8,0xAC,0x0C};
         // guarantees the first 2 characters, when base58 encoded, are "ST"
         base58Prefixes[ZCSPENDING_KEY]     = {0xAC,0x08};
+        // testnet obsr BIP44 coin type is '1' (All coin's testnet default)
+        base58Prefixes[EXT_COIN_TYPE]      = {0x80,0x77,0x67,0x71};
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
@@ -272,10 +343,17 @@ public:
 //        };
 
         checkpointData = (Checkpoints::CCheckpointData) {
-            boost::assign::map_list_of ( 0, consensus.hashGenesisBlock),
-            genesis.nTime,
-            0,
-            0
+            boost::assign::map_list_of
+                ( 0, consensus.hashGenesisBlock)
+                (2500, uint256S("0x00390ee15e3ed441663a2f13c98bfe7d7a9931149103d194d02bd571d3b9da4b"))
+                (5000, uint256S("0x0027cfb0afc7471056b096bfedbe79a536ae859a5f5c0114df50ceb3c19695c8"))
+                (10000, uint256S("0x001eb45924d269768f7880d3e08c1aed96d8b62eb20365dc394191634d2cb7bf"))
+                (30000, uint256S("0x000a65a73546732a4ff230aeed8bff75fe00ef3211e646ce8bd1675311c6f708"))
+                (45000, uint256S("0x0000a29126074cfd48823b41db1cfbdc65aabbf917c071658469c5082de720dd")),
+                (100000, uint256S("0x0025f8e94b6440765d8b984467201c6d2ef633a557a43a8bde15045903b1f7ef"))
+            1562255877,
+            134010,
+            772
         };
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
