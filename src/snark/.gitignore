@@ -2,6 +2,7 @@
 *.a
 *.so
 *.d
+!Makefile
 libsnark/gtests
 depinst/
 depsrc/
