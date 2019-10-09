@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2014 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 #ifndef BITCOIN_DBWRAPPER_H
 #define BITCOIN_DBWRAPPER_H
@@ -33,7 +33,7 @@ namespace dbwrapper_private {
 
 /** Handle database error by throwing dbwrapper_error exception.
  */
-    void HandleError(const leveldb::Status& status);
+void HandleError(const leveldb::Status& status);
 
 };
 
@@ -93,7 +93,7 @@ public:
      * @param[in] _piter           The original leveldb iterator.
      */
     CDBIterator(const CDBWrapper &_parent, leveldb::Iterator *_piter) :
-            parent(_parent), piter(_piter) { };
+        parent(_parent), piter(_piter) { };
     ~CDBIterator();
 
     bool Valid();

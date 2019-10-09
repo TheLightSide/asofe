@@ -1,6 +1,6 @@
 // Copyright (c) 2017 The Zcash developers
 // Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 #ifndef ZCASH_AMQP_AMQPCONFIG_H
 #define ZCASH_AMQP_AMQPCONFIG_H
@@ -27,7 +27,7 @@
 #include <proton/url.hpp>
 #endif
 
-#include "../primitives/block.h"
-#include "../primitives/transaction.h"
+#include "primitives/block.h"
+#include "primitives/transaction.h"
 
 #endif // ZCASH_AMQP_AMQPCONFIG_H

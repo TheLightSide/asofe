@@ -1,4 +1,6 @@
-import re, sys, os, os.path
+# -*- coding: utf-8 -*-
+
+import re, os, os.path
 import subprocess
 import argparse
 from itertools import islice
@@ -20,9 +22,19 @@ RELEASE_NOTES_CHANGELOG_HEADING = [
 ]
 
 author_aliases = {
-    'Simon': 'Simon Liu',
+    'Ariel': 'Ariel Gabizon',
+    'arielgabizon': 'Ariel Gabizon',
     'bitcartel': 'Simon Liu',
+    'Charlie OKeefe': 'Charlie O\'Keefe',
+    'Duke Leto': 'Jonathan \"Duke\" Leto',
+    'Eirik0': 'Eirik Ogilvie-Wigley',
     'EthanHeilman': 'Ethan Heilman',
+    'MarcoFalke': 'Marco Falke',
+    'mdr0id': 'Marshall Gaucher',
+    'paveljanik': 'Pavel Janík',
+    'Simon': 'Simon Liu',
+    'str4d': 'Jack Grigg',
+    'zebambam': 'Benjamin Winston'
 }
 
 def apply_author_aliases(name):

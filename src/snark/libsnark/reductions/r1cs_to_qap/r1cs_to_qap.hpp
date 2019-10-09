@@ -4,7 +4,7 @@
  Declaration of interfaces for a R1CS-to-QAP reduction, that is, constructing
  a QAP ("Quadratic Arithmetic Program") from a R1CS ("Rank-1 Constraint System").
 
- QAPs are defined in \[GGPR13], and construced for R1CS also in \[GGPR13].
+ QAPs are defined in \[GGPR13], and constructed for R1CS also in \[GGPR13].
 
  The implementation of the reduction follows, extends, and optimizes
  the efficient approach described in Appendix E of \[BCGTV13].
@@ -32,8 +32,8 @@
 #ifndef R1CS_TO_QAP_HPP_
 #define R1CS_TO_QAP_HPP_
 
-#include "../../relations/arithmetic_programs/qap/qap.hpp"
-#include "../../relations/constraint_satisfaction_problems/r1cs/r1cs.hpp"
+#include "relations/arithmetic_programs/qap/qap.hpp"
+#include "relations/constraint_satisfaction_problems/r1cs/r1cs.hpp"
 
 namespace libsnark {
 
@@ -65,6 +65,6 @@ qap_witness<FieldT> r1cs_to_qap_witness_map(const r1cs_constraint_system<FieldT>
 
 } // libsnark
 
-#include "../../reductions/r1cs_to_qap/r1cs_to_qap.tcc"
+#include "reductions/r1cs_to_qap/r1cs_to_qap.tcc"
 
 #endif // R1CS_TO_QAP_HPP_

@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2014 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 #include "dbwrapper.h"
 
@@ -89,18 +89,18 @@ void CDBIterator::Next() { piter->Next(); }
 
 namespace dbwrapper_private {
 
-    void HandleError(const leveldb::Status& status)
-    {
-        if (status.ok())
-            return;
-        LogPrintf("%s\n", status.ToString());
-        if (status.IsCorruption())
-            throw dbwrapper_error("Database corrupted");
-        if (status.IsIOError())
-            throw dbwrapper_error("Database I/O error");
-        if (status.IsNotFound())
-            throw dbwrapper_error("Database entry missing");
-        throw dbwrapper_error("Unknown database error");
-    }
+void HandleError(const leveldb::Status& status)
+{
+    if (status.ok())
+        return;
+    LogPrintf("%s\n", status.ToString());
+    if (status.IsCorruption())
+        throw dbwrapper_error("Database corrupted");
+    if (status.IsIOError())
+        throw dbwrapper_error("Database I/O error");
+    if (status.IsNotFound())
+        throw dbwrapper_error("Database entry missing");
+    throw dbwrapper_error("Unknown database error");
+}
 
 };

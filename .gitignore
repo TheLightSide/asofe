@@ -8,10 +8,6 @@ src/asofe-gtest
 src/asofe-tx
 src/test/test_bitcoin
 
-# Zcash utilities
-src/zcash/GenerateParams
-src/zcash/CreateJoinSplit
-
 *zcashTest.pk
 *zcashTest.vk
 

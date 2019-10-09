@@ -130,11 +130,11 @@ def verify_tags(releaseprev, releasefrom):
     if releaseprev != latest:
         raise SystemExit(
             'The latest candidate in `git tag --list` is {} not {}'
-            .format(
+                .format(
                 latest.vtext,
                 releaseprev.vtext,
             ),
-        )
+                )
 
     candidates.reverse()
     prev_tags = []
@@ -146,20 +146,20 @@ def verify_tags(releaseprev, releasefrom):
     else:
         raise SystemExit(
             '{} does not appear in `git tag --list`'
-            .format(
+                .format(
                 releasefrom.vtext,
             ),
-        )
+                )
 
     for tag in prev_tags:
         if not tag.betarc:
             raise SystemExit(
                 '{} appears to be a more recent non-beta non-RC release than {}'
-                .format(
+                    .format(
                     tag.vtext,
                     releasefrom.vtext,
                 ),
-            )
+                    )
 
 
 @phase('Checking version.')
@@ -217,7 +217,7 @@ def patch_version_in_files(release, releaseprev):
     patch_gitian_linux_yml(release, releaseprev)
 
 
-@phase('Patching release height for auto-senescence.')
+@phase('Patching release height for end-of-support halt.')
 def patch_release_height(releaseheight):
     rgx = re.compile(
         r'^(static const int APPROX_RELEASE_HEIGHT = )\d+(;)$',
@@ -292,7 +292,7 @@ def gen_release_notes(release, releasefrom):
 @phase('Updating debian changelog.')
 def update_debian_changelog(release):
     os.environ['DEBEMAIL'] = 'team@z.cash'
-    os.environ['DEBFULLNAME'] = 'Zcash Company'
+    os.environ['DEBFULLNAME'] = 'Electric Coin Company'
     sh_log(
         'debchange',
         '--newversion', release.debversion,
