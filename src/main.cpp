@@ -44,7 +44,7 @@
 using namespace std;
 
 #if defined(NDEBUG)
-# error "Zcash cannot be compiled without assertions."
+# error "Asofe cannot be compiled without assertions."
 #endif
 
 #include "librustzcash.h"
