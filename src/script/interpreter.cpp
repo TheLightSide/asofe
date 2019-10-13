@@ -1202,7 +1202,7 @@ uint256 SignatureHash(
 
         uint32_t leConsensusBranchId = htole32(consensusBranchId);
         unsigned char personalization[16] = {};
-        memcpy(personalization, "ZcashSigHash", 12);
+        memcpy(personalization, "AsofeSigHash", 12);
         memcpy(personalization+12, &leConsensusBranchId, 4);
 
         CBLAKE2bWriter ss(SER_GETHASH, 0, personalization);

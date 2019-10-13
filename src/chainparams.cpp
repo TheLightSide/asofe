@@ -111,7 +111,7 @@ public:
         consensus.vUpgrades[Consensus::UPGRADE_OVERWINTER].nProtocolVersion = 170018;
         consensus.vUpgrades[Consensus::UPGRADE_OVERWINTER].nActivationHeight = 310600;
         consensus.vUpgrades[Consensus::UPGRADE_SAPLING].nProtocolVersion = 170020;
-        consensus.vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight = 311000;
+        consensus.vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight = 310610;
         consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nProtocolVersion = 170022;
         consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nActivationHeight =
             Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
@@ -126,7 +126,7 @@ public:
         pchMessageStart[1] = 0xe9;
         pchMessageStart[2] = 0x27;
         pchMessageStart[3] = 0x64;
-        vAlertPubKey = ParseHex("0439fb80f971f181b8a9fb9c5429864f0decb7e7055e43ec41eb754b35c8208a6e8840053ef841f19a0b9ca53914dd78becc1d06b17684949f1f45237b31da96be");
+        vAlertPubKey = ParseHex("047981778f47130d6ea06f36cd765c53d0f8d7a3b1dcf7388718666fc743e010d060289919a622371899333b821aaf8e480bda65a8f8dfffb39a875eb9b114805d");
         nDefaultPort = 8585;
         nPruneAfterHeight = 100000;
 
@@ -197,7 +197,7 @@ public:
         // in #2795.
         nSproutValuePoolCheckpointHeight = 520633;
         nSproutValuePoolCheckpointBalance = 22145062442933;
-        fZIP209Enabled = false;
+        fZIP209Enabled = true;
         hashSproutValuePoolCheckpointBlock = uint256S("0000000000c7b46b6bc04b4cbf87d8bb08722aebd51232619b214f7273f8460e");
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
@@ -329,7 +329,7 @@ public:
         pchMessageStart[1] = 0x1a;
         pchMessageStart[2] = 0xf9;
         pchMessageStart[3] = 0xbf;
-        vAlertPubKey = ParseHex("048fd981641cd9d49e1563185a43a750a868cd12b53f04a4658619c560ee507c92453908ff29aad70acf2296d263b7728db61b44fb7d92e773fe3c80db452ba7cd");
+        vAlertPubKey = ParseHex("044611f69ad5cb991cd7dc76ddff88557bde07bb2f171bb036debb441353ffa26d3110fc07b8ffb7dffe9b0b459c30c7aac9daac5e278c6f51ebc0d292ccbbc9d6");
         nDefaultPort = 18086;
         nPruneAfterHeight = 1000;
 
