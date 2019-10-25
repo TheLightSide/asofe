@@ -438,7 +438,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "Zcash";
+    const char* pszModule = "Asofe";
 #endif
     if (pex)
         return strprintf(
@@ -465,7 +465,7 @@ boost::filesystem::path GetDefaultDataDir()
     // Unix: ~/.zcash
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Zcash";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Asofe";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -492,16 +492,16 @@ static CCriticalSection csPathCached;
 
 static boost::filesystem::path ZC_GetBaseParamsDir()
 {
-    // Copied from GetDefaultDataDir and adapter for zcash params.
+    // Copied from GetDefaultDataDir and adapter for asofe params.
 
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\ZcashParams
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\ZcashParams
-    // Mac: ~/Library/Application Support/ZcashParams
-    // Unix: ~/.zcash-params
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\AsofeParams
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\AsofeParams
+    // Mac: ~/Library/Application Support/AsofeParams
+    // Unix: ~/.asofe-params
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "ZcashParams";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / AsofeParams";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -915,6 +915,7 @@ std::string LicenseInfo()
     return "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2009-%i The Bitcoin Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2015-%i The Zcash Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) 2018-%i The Asofe Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +
            "\n" +
