@@ -42,7 +42,7 @@ cp $SRC_PATH/src/asofed $DEB_BIN
 cp $SRC_PATH/src/asofe-cli $DEB_BIN
 cp $SRC_PATH/zcutil/fetch-params.sh $DEB_BIN/asofe-fetch-params
 # Copy docs
-cp $SRC_PATH/doc/release-notes/release-notes-1.0.0.md $DEB_DOC/changelog
+cp $SRC_PATH/doc/release-notes/release-notes-2.0.7.md $DEB_DOC/changelog
 cp $SRC_DEB/changelog $DEB_DOC/changelog.Debian
 cp $SRC_DEB/copyright $DEB_DOC
 cp -r $SRC_DEB/examples $DEB_DOC
