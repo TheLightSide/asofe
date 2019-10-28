@@ -94,6 +94,12 @@ public:
         BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
         consensus.nEquihashN = N;
         consensus.nEquihashK = K;
+
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 90000;
+        eh_epoch_2_startblock = 89500;
+
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
@@ -295,6 +301,12 @@ public:
         BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
         consensus.nEquihashN = N;
         consensus.nEquihashK = K;
+
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 13322;
+        eh_epoch_2_startblock = 13322;
+
         consensus.powLimit = uint256S("07ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
@@ -435,6 +447,12 @@ public:
         BOOST_STATIC_ASSERT(equihash_parameters_acceptable(N, K));
         consensus.nEquihashN = N;
         consensus.nEquihashK = K;
+
+        eh_epoch_1 = eh200_9;
+        eh_epoch_2 = eh144_5;
+        eh_epoch_1_endblock = 1;
+        eh_epoch_2_startblock = 1;
+
         consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f");
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
@@ -624,4 +642,21 @@ void UpdateNetworkUpgradeParameters(Consensus::UpgradeIndex idx, int nActivation
 
 void UpdateRegtestPow(int64_t nPowMaxAdjustDown, int64_t nPowMaxAdjustUp, uint256 powLimit) {
     regTestParams.UpdateRegtestPow(nPowMaxAdjustDown, nPowMaxAdjustUp, powLimit);
+}
+
+int validEHparameterList(EHparameters *ehparams, unsigned long blockheight, const CChainParams& params){
+  //if in overlap period, there will be two valid solutions, else 1.
+  //The upcoming version of EH is preferred so will always be first element
+  //returns number of elements in list
+  if(blockheight >= params.eh_epoch_2_start() && blockheight > params.eh_epoch_1_end()){
+    ehparams[0] = params.eh_epoch_2_params();
+    return 1;
+  }
+  if(blockheight < params.eh_epoch_2_start()){
+    ehparams[0] = params.eh_epoch_1_params();
+    return 1;
+  }
+  ehparams[0] = params.eh_epoch_2_params();
+  ehparams[1] = params.eh_epoch_1_params();
+  return 2;
 }

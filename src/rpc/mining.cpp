@@ -195,8 +195,14 @@ UniValue generate(const UniValue& params, bool fHelp)
     }
     unsigned int nExtraNonce = 0;
     UniValue blockHashes(UniValue::VARR);
+
+    EHparameters ehparams[MAX_EH_PARAM_LIST_LEN]; //allocate on-stack space for parameters list
+    const CChainParams& chainparams = Params();
+    validEHparameterList(ehparams, nHeight + 1, chainparams);
+
     unsigned int n = Params().GetConsensus().nEquihashN;
     unsigned int k = Params().GetConsensus().nEquihashK;
+
     while (nHeight < nHeightEnd)
     {
         std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlock(Params(), coinbaseScript->reserveScript));

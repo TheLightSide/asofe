@@ -19,23 +19,32 @@
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
+    const CChainParams& chainParams = Params();
+
+    if (pindexLast->nHeight == 89504)
+      return nProofOfWorkLimit;
 
     // Genesis block
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
 
+    // Reset the difficulty after the algo fork
+    if (pindexLast->nHeight > chainParams.eh_epoch_1_end() - 1
+        && pindexLast->nHeight < chainParams.eh_epoch_1_end() + params.nPowAveragingWindow) {
+      LogPrint("pow", "Reset the difficulty for the eh_epoch_2 algo change: %d\n", nProofOfWorkLimit);
+      return nProofOfWorkLimit;
+    }
+
+    // Comparing to pindexLast->nHeight with >= because this function
+    // returns the work required for the block after pindexLast.
+    if (params.nPowAllowMinDifficultyBlocksAfterHeight != boost::none &&
+        pindexLast->nHeight >= params.nPowAllowMinDifficultyBlocksAfterHeight.get())
     {
-        // Comparing to pindexLast->nHeight with >= because this function
-        // returns the work required for the block after pindexLast.
-        if (params.nPowAllowMinDifficultyBlocksAfterHeight != boost::none &&
-            pindexLast->nHeight >= params.nPowAllowMinDifficultyBlocksAfterHeight.get())
-        {
-            // Special difficulty rule for testnet:
-            // If the new block's timestamp is more than 6 * block interval minutes
-            // then allow mining of a min-difficulty block.
-            if (pblock && pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.PoWTargetSpacing(pindexLast->nHeight + 1) * 6)
-                return nProofOfWorkLimit;
-        }
+        // Special difficulty rule for testnet:
+        // If the new block's timestamp is more than 6 * block interval minutes
+        // then allow mining of a min-difficulty block.
+        if (pblock && pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.PoWTargetSpacing(pindexLast->nHeight + 1) * 6)
+            return nProofOfWorkLimit;
     }
 
     // Find the first block in the averaging interval
