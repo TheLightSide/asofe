@@ -501,7 +501,7 @@ static boost::filesystem::path ZC_GetBaseParamsDir()
     // Unix: ~/.asofe-params
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / AsofeParams";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "AsofeParams";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
