@@ -22,11 +22,10 @@ CAmount CFeeRate::GetFee(size_t nSize) const
   double calcSatoshi = static_cast<double>(nSatoshisPerK) * nSize / 100000;
   CAmount nFee = (calcSatoshi < 1 && calcSatoshi != 0) ? 1 : calcSatoshi;
 
-  if (nFee == 0 && nSatoshisPerK > 0) {
-    nFee = nSatoshisPerK;
-  }
+    if (nFee == 0 && nSatoshisPerK > 0)
+        nFee = nSatoshisPerK;
 
-  return nFee;
+    return nFee;
 }
 
 std::string CFeeRate::ToString() const

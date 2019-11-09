@@ -72,7 +72,7 @@ function zcashd_start {
         *)
             rm -rf "$DATADIR"
             mkdir -p "$DATADIR/regtest"
-            touch "$DATADIR/asofe.conf"
+            touch "$DATADIR/zcash.conf"
     esac
     ./src/zcashd -regtest -datadir="$DATADIR" -rpcuser=user -rpcpassword=password -rpcport=5983 -showmetrics=0 &
     ZCASHD_PID=$!
@@ -102,7 +102,7 @@ function zcashd_massif_start {
         *)
             rm -rf "$DATADIR"
             mkdir -p "$DATADIR/regtest"
-            touch "$DATADIR/asofe.conf"
+            touch "$DATADIR/zcash.conf"
     esac
     rm -f massif.out
     valgrind --tool=massif --time-unit=ms --massif-out-file=massif.out ./src/zcashd -regtest -datadir="$DATADIR" -rpcuser=user -rpcpassword=password -rpcport=5983 -showmetrics=0 &
@@ -119,7 +119,7 @@ function zcashd_massif_stop {
 function zcashd_valgrind_start {
     rm -rf "$DATADIR"
     mkdir -p "$DATADIR/regtest"
-    touch "$DATADIR/asofe.conf"
+    touch "$DATADIR/zcash.conf"
     rm -f valgrind.out
     valgrind --leak-check=yes -v --error-limit=no --log-file="valgrind.out" ./src/zcashd -regtest -datadir="$DATADIR" -rpcuser=user -rpcpassword=password -rpcport=5983 -showmetrics=0 &
     ZCASHD_PID=$!
@@ -182,6 +182,18 @@ case "$1" in
             parameterloading)
                 zcash_rpc zcbenchmark parameterloading 10
                 ;;
+            createsaplingspend)
+                zcash_rpc zcbenchmark createsaplingspend 10
+                ;;
+            verifysaplingspend)
+                zcash_rpc zcbenchmark verifysaplingspend 1000
+                ;;
+            createsaplingoutput)
+                zcash_rpc zcbenchmark createsaplingoutput 50
+                ;;
+            verifysaplingoutput)
+                zcash_rpc zcbenchmark verifysaplingoutput 1000
+                ;;
             createjoinsplit)
                 zcash_rpc zcbenchmark createjoinsplit 10 "${@:3}"
                 ;;
@@ -195,7 +207,7 @@ case "$1" in
                 zcash_rpc zcbenchmark verifyequihash 1000
                 ;;
             validatelargetx)
-                zcash_rpc zcbenchmark validatelargetx 5
+                zcash_rpc zcbenchmark validatelargetx 10 "${@:3}"
                 ;;
             trydecryptnotes)
                 zcash_rpc zcbenchmark trydecryptnotes 1000 "${@:3}"
@@ -231,6 +243,18 @@ case "$1" in
                 ;;
             parameterloading)
                 zcash_rpc zcbenchmark parameterloading 1
+                ;;
+            createsaplingspend)
+                zcash_rpc zcbenchmark createsaplingspend 1
+                ;;
+            verifysaplingspend)
+                zcash_rpc zcbenchmark verifysaplingspend 1
+                ;;
+            createsaplingoutput)
+                zcash_rpc zcbenchmark createsaplingoutput 1
+                ;;
+            verifysaplingoutput)
+                zcash_rpc zcbenchmark verifysaplingoutput 1
                 ;;
             createjoinsplit)
                 zcash_rpc_slow zcbenchmark createjoinsplit 1 "${@:3}"
@@ -282,6 +306,18 @@ case "$1" in
                 ;;
             parameterloading)
                 zcash_rpc zcbenchmark parameterloading 1
+                ;;
+            createsaplingspend)
+                zcash_rpc zcbenchmark createsaplingspend 1
+                ;;
+            verifysaplingspend)
+                zcash_rpc zcbenchmark verifysaplingspend 1
+                ;;
+            createsaplingoutput)
+                zcash_rpc zcbenchmark createsaplingoutput 1
+                ;;
+            verifysaplingoutput)
+                zcash_rpc zcbenchmark verifysaplingoutput 1
                 ;;
             createjoinsplit)
                 zcash_rpc_veryslow zcbenchmark createjoinsplit 1 "${@:3}"

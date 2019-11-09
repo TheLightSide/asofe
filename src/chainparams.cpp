@@ -116,11 +116,14 @@ public:
             Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
         consensus.vUpgrades[Consensus::UPGRADE_OVERWINTER].nProtocolVersion = 170018;
         consensus.vUpgrades[Consensus::UPGRADE_OVERWINTER].nActivationHeight = 310600;
+        consensus.vUpgrades[Consensus::UPGRADE_OVERWINTER].hashActivationBlock =
+            uint256S("000244a43e3e9b8d62f084e3ebd5e1a417c6f469497115296b21b5de78253d33");
         consensus.vUpgrades[Consensus::UPGRADE_SAPLING].nProtocolVersion = 170020;
         consensus.vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight = 310610;
+        consensus.vUpgrades[Consensus::UPGRADE_SAPLING].hashActivationBlock =
+            uint256S("0003650dcc1acea647e95ab6fe2f5cdbc2e622276f572dbcc8f51c9d19232d2f");
         consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nProtocolVersion = 170022;
-        consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nActivationHeight =
-            Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
+        consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nActivationHeight = 324000;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("000000000000000000000000000000000000000000000000017e73a331fae01c");
@@ -201,10 +204,10 @@ public:
         // Hardcoded fallback value for the Sprout shielded value pool balance
         // for nodes that have not reindexed since the introduction of monitoring
         // in #2795.
-        nSproutValuePoolCheckpointHeight = 520633;
+        nSproutValuePoolCheckpointHeight = 320156;
         nSproutValuePoolCheckpointBalance = 22145062442933;
         fZIP209Enabled = true;
-        hashSproutValuePoolCheckpointBlock = uint256S("0000000000c7b46b6bc04b4cbf87d8bb08722aebd51232619b214f7273f8460e");
+        hashSproutValuePoolCheckpointBlock = uint256S("00005ef29f3e8aea82768e6232e61120e042e4066a6b50e90362bf1a6afba066");
 
         // Founders reward script expects a vector of 2-of-3 multisig addresses
         vFoundersRewardAddress = {

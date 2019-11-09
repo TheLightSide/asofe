@@ -1,12 +1,14 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # Copyright (c) 2014 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+# file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 #
 # Test re-org scenarios with a mempool that contains transactions
 # that spend (directly or indirectly) coinbase transactions.
 #
+
+import sys; assert sys.version_info < (3,), ur"This script does not run under Python 3. Please use Python 2.7.x."
 
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.authproxy import JSONRPCException
@@ -26,7 +28,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         self.nodes = start_nodes(3, self.options.tmpdir)
 
         #connect to a local machine for debugging
-        #url = "http://bitcoinrpc:DP6DvqZtqXarpeNWyN3LZTFchCCyCUuHwNF7E8pX99x1@%s:%d" % ('127.0.0.1', 18086)
+        #url = "http://bitcoinrpc:DP6DvqZtqXarpeNWyN3LZTFchCCyCUuHwNF7E8pX99x1@%s:%d" % ('127.0.0.1', 18232)
         #proxy = AuthServiceProxy(url)
         #proxy.url = url # store URL on proxy for info
         #self.nodes.append(proxy)
@@ -130,7 +132,7 @@ class RawTransactionsTest(BitcoinTestFramework):
                 break;
 
         bal = self.nodes[0].getbalance()
-        inputs = [{ "txid" : txId, "vout" : vout['n'], "scriptPubKey" : vout['scriptPubKey']['hex']}]
+        inputs = [{ "txid" : txId, "vout" : vout['n'], "scriptPubKey" : vout['scriptPubKey']['hex'], "amount" : vout['value']}]
         outputs = { self.nodes[0].getnewaddress() : 2.199 }
         rawTx = self.nodes[2].createrawtransaction(inputs, outputs)
         rawTxPartialSigned = self.nodes[1].signrawtransaction(rawTx, inputs)
@@ -144,6 +146,12 @@ class RawTransactionsTest(BitcoinTestFramework):
         self.nodes[0].generate(1)
         self.sync_all()
         assert_equal(self.nodes[0].getbalance(), bal+Decimal('10.00000000')+Decimal('2.19900000')) #block reward + tx
+
+        inputs  = [ {'txid' : "1d1d4e24ed99057e84c3f80fd8fbec79ed9e1acee37da269356ecea000000000", 'vout' : 1, 'sequence' : 1000}]
+        outputs = { self.nodes[0].getnewaddress() : 1 }
+        rawtx   = self.nodes[0].createrawtransaction(inputs, outputs)
+        decrawtx= self.nodes[0].decoderawtransaction(rawtx)
+        assert_equal(decrawtx['vin'][0]['sequence'], 1000)
 
 if __name__ == '__main__':
     RawTransactionsTest().main()

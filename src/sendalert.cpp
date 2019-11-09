@@ -81,8 +81,9 @@ void ThreadSendAlert()
     // 170016 : 1.1.0
     // 170018 : 2.0.6
     // 170020 : 2.0.7
-    alert.nMinVer       = 170016;
-    alert.nMaxVer       = 170020;
+    // 170022 : 2.1.0
+    alert.nMinVer       = 170022;
+    alert.nMaxVer       = 170022;
 
     //
     // main.cpp:
@@ -92,7 +93,7 @@ void ThreadSendAlert()
     //  4000 or higher will put the RPC into safe mode
     alert.nPriority     = 4000;
     alert.strComment    = "";
-    alert.strStatusBar  = "Your client is out of date and incompatible with the Overwinter network upgrade. Please update to a recent version of Asofe (2.0.7 or later).";
+    alert.strStatusBar  = "Your client is out of date and incompatible with the Sapling network upgrade. Please update to a recent version of Asofe (2.1.0 or later).";
     alert.strRPCError   = alert.strStatusBar;
 
     // Set specific client version/versions here. If setSubVer is empty, no filtering on subver is done:

@@ -1,7 +1,8 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 # Copyright (c) 2014 Wladimir J. van der Laan
+# Copyright (c) 2016-2019 The Zcash developers
 # Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+# file COPYING or https://www.opensource.org/licenses/mit-license.php .
 '''
 A script to check that the (Linux) executables produced by gitian only contain
 allowed gcc, glibc and libstdc++ version symbols.  This makes sure they are
@@ -53,7 +54,7 @@ READELF_CMD = os.getenv('READELF', '/usr/bin/readelf')
 CPPFILT_CMD = os.getenv('CPPFILT', '/usr/bin/c++filt')
 # Allowed NEEDED libraries
 ALLOWED_LIBRARIES = {
-# asofed
+# zcashd
 'libgcc_s.so.1', # GCC base support
 'libc.so.6', # C library
 'libstdc++.so.6', # C++ standard library

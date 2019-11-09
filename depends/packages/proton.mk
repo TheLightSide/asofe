@@ -21,3 +21,4 @@ endef
 define $(package)_stage_cmds
   cd build; $(MAKE) VERBOSE=1 DESTDIR=$($(package)_staging_prefix_dir) install
 endef
+

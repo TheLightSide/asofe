@@ -1,8 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 #
 # Tests a joinsplit double-spend and a subsequent reorg.
 #
+
+import sys; assert sys.version_info < (3,), ur"This script does not run under Python 3. Please use Python 2.7.x."
 
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.authproxy import JSONRPCException
@@ -40,7 +42,7 @@ class JoinSplitTest(BitcoinTestFramework):
         assert_equal(self.cannot_joinsplit(node, txn), True)
 
     def run_test(self):
-        # All nodes should start with 250 BTC:
+        # All nodes should start with 250 ZEC:
         starting_balance = 250
         for i in range(4):
             assert_equal(self.nodes[i].getbalance(), starting_balance)

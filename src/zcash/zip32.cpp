@@ -17,7 +17,7 @@ const unsigned char ZCASH_HD_SEED_FP_PERSONAL[crypto_generichash_blake2b_PERSONA
     {'A', 's', 'o', 'f', 'e', '_', 'H', 'D', '_', 'S', 'e', 'e', 'd', '_', 'F', 'P'};
 
 const unsigned char ZCASH_TADDR_OVK_PERSONAL[crypto_generichash_blake2b_PERSONALBYTES] =
-    {'A', 's', 'o', 'f', 'e', 'd', 'r', 'T', 'o', 'S', 'a', 'p', 'l', 'i', 'n', 'g'};
+    {'A', 's', 'T', 'a', 'd', 'd', 'r', 'T', 'o', 'S', 'a', 'p', 'l', 'i', 'n', 'g'};
 
 HDSeed HDSeed::Random(size_t len)
 {

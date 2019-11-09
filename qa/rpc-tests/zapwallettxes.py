@@ -1,7 +1,9 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # Copyright (c) 2014 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+# file COPYING or https://www.opensource.org/licenses/mit-license.php .
+
+import sys; assert sys.version_info < (3,), ur"This script does not run under Python 3. Please use Python 2.7.x."
 
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.authproxy import JSONRPCException
@@ -53,7 +55,7 @@ class ZapWalletTXesTest (BitcoinTestFramework):
         tx3 = self.nodes[0].gettransaction(txid3)
         assert_equal(tx3['txid'], txid3) # tx3 must be available (unconfirmed)
 
-        # restart asofed
+        # restart zcashd
         self.nodes[0].stop()
         bitcoind_processes[0].wait()
         self.nodes[0] = start_node(0,self.options.tmpdir)
@@ -64,7 +66,7 @@ class ZapWalletTXesTest (BitcoinTestFramework):
         self.nodes[0].stop()
         bitcoind_processes[0].wait()
 
-        # restart asofed with zapwallettxes
+        # restart zcashd with zapwallettxes
         self.nodes[0] = start_node(0,self.options.tmpdir, ["-zapwallettxes=1"])
 
         aException = False
