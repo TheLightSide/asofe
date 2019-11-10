@@ -205,7 +205,7 @@ public:
         // for nodes that have not reindexed since the introduction of monitoring
         // in #2795.
         nSproutValuePoolCheckpointHeight = 320156;
-        nSproutValuePoolCheckpointBalance = 22145062442933;
+        nSproutValuePoolCheckpointBalance = 691511613;
         fZIP209Enabled = true;
         hashSproutValuePoolCheckpointBlock = uint256S("00005ef29f3e8aea82768e6232e61120e042e4066a6b50e90362bf1a6afba066");
 
