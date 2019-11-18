@@ -124,6 +124,8 @@ public:
             uint256S("0003650dcc1acea647e95ab6fe2f5cdbc2e622276f572dbcc8f51c9d19232d2f");
         consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nProtocolVersion = 170022;
         consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].nActivationHeight = 324000;
+        consensus.vUpgrades[Consensus::UPGRADE_BLOSSOM].hashActivationBlock =
+            uint256S("00016f87b9e20706be2a176179e49920b8063a41e6a42bd3c852fb661d0e53fa");
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("000000000000000000000000000000000000000000000000017e73a331fae01c");
