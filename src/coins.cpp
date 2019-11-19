@@ -7,6 +7,7 @@
 #include "memusage.h"
 #include "random.h"
 #include "version.h"
+#include "chainparams.h"
 #include "policy/fees.h"
 
 #include <assert.h>
@@ -562,9 +563,10 @@ CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
     return nResult;
 }
 
-bool CCoinsViewCache::HaveShieldedRequirements(const CTransaction& tx) const
+bool CCoinsViewCache::HaveShieldedRequirements(const CTransaction& tx, int nHeight) const
 {
     boost::unordered_map<uint256, SproutMerkleTree, CCoinsKeyHasher> intermediates;
+    bool saplingCurrentHeight = nHeight >= Params().GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight;
 
     BOOST_FOREACH(const JSDescription &joinsplit, tx.vJoinSplit)
     {
@@ -598,7 +600,7 @@ bool CCoinsViewCache::HaveShieldedRequirements(const CTransaction& tx) const
             return false;
 
         SaplingMerkleTree tree;
-        if (!GetSaplingAnchorAt(spendDescription.anchor, tree)) {
+        if (saplingCurrentHeight && !GetSaplingAnchorAt(spendDescription.anchor, tree)) {
             return false;
         }
     }

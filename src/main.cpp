@@ -675,24 +675,20 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans) EXCLUSIVE_LOCKS_REQUIRE
 bool IsStandardTx(const CTransaction& tx, string& reason, const CChainParams& chainparams, const int nHeight)
 {
     bool overwinterActive = chainparams.GetConsensus().NetworkUpgradeActive(nHeight,  Consensus::UPGRADE_OVERWINTER);
+    bool overwinterCurrentHeight = nHeight >= chainparams.GetConsensus().vUpgrades[Consensus::UPGRADE_OVERWINTER].nActivationHeight;
     bool saplingActive = chainparams.GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_SAPLING);
+    bool saplingCurrentHeight = nHeight >= chainparams.GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight;
 
     if (saplingActive) {
         // Sapling standard rules apply
-        if (tx.nVersion > CTransaction::SAPLING_MAX_CURRENT_VERSION || tx.nVersion < CTransaction::SAPLING_MIN_CURRENT_VERSION) {
+        if ((tx.nVersion > CTransaction::SAPLING_MAX_CURRENT_VERSION || tx.nVersion < CTransaction::SAPLING_MIN_CURRENT_VERSION) && saplingCurrentHeight) {
             reason = "sapling-version";
             return false;
         }
     } else if (overwinterActive) {
         // Overwinter standard rules apply
-        if (tx.nVersion > CTransaction::OVERWINTER_MAX_CURRENT_VERSION || tx.nVersion < CTransaction::OVERWINTER_MIN_CURRENT_VERSION) {
+        if ((tx.nVersion > CTransaction::OVERWINTER_MAX_CURRENT_VERSION || tx.nVersion < CTransaction::OVERWINTER_MIN_CURRENT_VERSION) && overwinterCurrentHeight) {
             reason = "overwinter-version";
-            return false;
-        }
-    } else {
-        // Sprout standard rules apply
-        if (tx.nVersion > CTransaction::SPROUT_MAX_CURRENT_VERSION || tx.nVersion < CTransaction::SPROUT_MIN_CURRENT_VERSION) {
-            reason = "version";
             return false;
         }
     }
@@ -915,11 +911,13 @@ bool ContextualCheckTransaction(
         bool (*isInitBlockDownload)(const CChainParams&))
 {
     bool overwinterActive = chainparams.GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_OVERWINTER);
+    bool overwinterCurrentHeight = nHeight >= chainparams.GetConsensus().vUpgrades[Consensus::UPGRADE_OVERWINTER].nActivationHeight;
     bool saplingActive = chainparams.GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_SAPLING);
+    bool saplingCurrentHeight = nHeight >= chainparams.GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight;
     bool isSprout = !overwinterActive;
 
     // If Sprout rules apply, reject transactions which are intended for Overwinter and beyond
-    if (isSprout && tx.fOverwintered) {
+    if (isSprout && tx.fOverwintered && overwinterCurrentHeight) {
         return state.DoS(isInitBlockDownload(chainparams) ? 0 : dosLevel,
                          error("ContextualCheckTransaction(): overwinter is not active yet"),
                          REJECT_INVALID, "tx-overwinter-not-active");
@@ -927,45 +925,45 @@ bool ContextualCheckTransaction(
 
     if (saplingActive) {
         // Reject transactions with valid version but missing overwintered flag
-        if (tx.nVersion >= SAPLING_MIN_TX_VERSION && !tx.fOverwintered) {
+        if (saplingCurrentHeight && (tx.nVersion >= SAPLING_MIN_TX_VERSION && !tx.fOverwintered)) {
             return state.DoS(dosLevel, error("ContextualCheckTransaction(): overwintered flag must be set"),
                             REJECT_INVALID, "tx-overwintered-flag-not-set");
         }
 
         // Reject transactions with non-Sapling version group ID
-        if (tx.fOverwintered && tx.nVersionGroupId != SAPLING_VERSION_GROUP_ID) {
+        if (saplingCurrentHeight && (tx.fOverwintered && tx.nVersionGroupId != SAPLING_VERSION_GROUP_ID)) {
             return state.DoS(isInitBlockDownload(chainparams) ? 0 : dosLevel,
                     error("CheckTransaction(): invalid Sapling tx version"),
                     REJECT_INVALID, "bad-sapling-tx-version-group-id");
         }
 
         // Reject transactions with invalid version
-        if (tx.fOverwintered && tx.nVersion < SAPLING_MIN_TX_VERSION ) {
+        if (saplingCurrentHeight && tx.fOverwintered && tx.nVersion < SAPLING_MIN_TX_VERSION) {
             return state.DoS(100, error("CheckTransaction(): Sapling version too low"),
                 REJECT_INVALID, "bad-tx-sapling-version-too-low");
         }
 
         // Reject transactions with invalid version
-        if (tx.fOverwintered && tx.nVersion > SAPLING_MAX_TX_VERSION ) {
+        if (saplingCurrentHeight && tx.fOverwintered && tx.nVersion > SAPLING_MAX_TX_VERSION) {
             return state.DoS(100, error("CheckTransaction(): Sapling version too high"),
                 REJECT_INVALID, "bad-tx-sapling-version-too-high");
         }
     } else if (overwinterActive) {
         // Reject transactions with valid version but missing overwinter flag
-        if (tx.nVersion >= OVERWINTER_MIN_TX_VERSION && !tx.fOverwintered) {
+        if (overwinterCurrentHeight && tx.nVersion >= OVERWINTER_MIN_TX_VERSION && !tx.fOverwintered) {
             return state.DoS(dosLevel, error("ContextualCheckTransaction(): overwinter flag must be set"),
                             REJECT_INVALID, "tx-overwinter-flag-not-set");
         }
 
         // Reject transactions with non-Overwinter version group ID
-        if (tx.fOverwintered && tx.nVersionGroupId != OVERWINTER_VERSION_GROUP_ID) {
+        if (overwinterCurrentHeight && tx.fOverwintered && tx.nVersionGroupId != OVERWINTER_VERSION_GROUP_ID) {
             return state.DoS(isInitBlockDownload(chainparams) ? 0 : dosLevel,
                     error("CheckTransaction(): invalid Overwinter tx version"),
                     REJECT_INVALID, "bad-overwinter-tx-version-group-id");
         }
 
         // Reject transactions with invalid version
-        if (tx.fOverwintered && tx.nVersion > OVERWINTER_MAX_TX_VERSION ) {
+        if (overwinterCurrentHeight && tx.fOverwintered && tx.nVersion > OVERWINTER_MAX_TX_VERSION) {
             return state.DoS(100, error("CheckTransaction(): overwinter version too high"),
                 REJECT_INVALID, "bad-tx-overwinter-version-too-high");
         }
@@ -974,7 +972,7 @@ bool ContextualCheckTransaction(
     // Rules that apply to Overwinter or later:
     if (overwinterActive) {
         // Reject transactions intended for Sprout
-        if (!tx.fOverwintered) {
+        if (overwinterCurrentHeight && !tx.fOverwintered) {
             return state.DoS(dosLevel, error("ContextualCheckTransaction: overwinter is active"),
                             REJECT_INVALID, "tx-overwinter-active");
         }
@@ -1029,8 +1027,7 @@ bool ContextualCheckTransaction(
         }
     }
 
-    if (!tx.vShieldedSpend.empty() ||
-        !tx.vShieldedOutput.empty())
+    if (saplingCurrentHeight && (!tx.vShieldedSpend.empty() || !tx.vShieldedOutput.empty()))
     {
         auto ctx = librustzcash_sapling_verification_ctx_init();
 
@@ -1379,6 +1376,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
         *pfMissingInputs = false;
 
     int nextBlockHeight = chainActive.Height() + 1;
+    bool saplingCurrentHeight = nextBlockHeight >= Params().GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight;
     auto consensusBranchId = CurrentEpochBranchId(nextBlockHeight, Params().GetConsensus());
 
     // Node operator can choose to reject tx by number of transparent inputs
@@ -1497,7 +1495,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
                                  REJECT_DUPLICATE, "bad-txns-inputs-spent");
 
         // are the joinsplits' and sapling spends' requirements met in tx(valid anchors/nullifiers)?
-        if (!view.HaveShieldedRequirements(tx))
+        if (saplingCurrentHeight && !view.HaveShieldedRequirements(tx, nextBlockHeight))
             return state.Invalid(error("AcceptToMemoryPool: shielded requirements not met"),
                                  REJECT_DUPLICATE, "bad-txns-shielded-requirements-not-met");
 
@@ -2107,7 +2105,7 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
             return state.Invalid(error("CheckInputs(): %s inputs unavailable", tx.GetHash().ToString()));
 
         // are the JoinSplit's requirements met?
-        if (!inputs.HaveShieldedRequirements(tx))
+        if (!inputs.HaveShieldedRequirements(tx, nSpendHeight))
             return state.Invalid(error("CheckInputs(): %s JoinSplit requirements not met", tx.GetHash().ToString()));
 
         CAmount nValueIn = 0;
@@ -2752,7 +2750,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                                  REJECT_INVALID, "bad-txns-inputs-missingorspent");
 
             // are the JoinSplit's requirements met?
-            if (!view.HaveShieldedRequirements(tx))
+            if (!view.HaveShieldedRequirements(tx, pindex->nHeight))
                 return state.DoS(100, error("ConnectBlock(): JoinSplit requirements not met"),
                                  REJECT_INVALID, "bad-txns-joinsplit-requirements-not-met");
 
